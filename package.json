@@ -1,0 +1,19 @@
+{
+  "name": "discord-bot-js",
+  "version": "1.0.0",
+  "description": "discord bot build with javascript",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abhishekairan/Discord-Bot-JS"
+  },
+  "author": "Abhishek Airan",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.16.1",
+    "dotenv": "^16.4.5"
+  }
+}
