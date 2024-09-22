@@ -7,5 +7,11 @@
     "roles": {
         "manager":"910871355807891466",
         "head_developer": "1065966980345102346"
+    },
+    "panel": {
+        "ClientURL": "https://panel.clubcolony.in/api/client",
+        "ApplicationURL": "https://panel.clubcolony.in/api/application",
+        "CLIENTKEY": "ptlc_ytuuj0jdGuBx4iG8ypkpFWobX4IApIAUOUfWi7S5Krd",
+        "APPLICATIONKEY": "ptla_zDs5In67MbY2Y6xxIdYmha9Hs4p1sdoYtfblSpIrk5q"
     }
 }
