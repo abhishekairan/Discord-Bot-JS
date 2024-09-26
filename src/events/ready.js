@@ -15,7 +15,6 @@ module.exports = {
 		const serverUUID = new Array(response)
 		const servers = await getter.getserver()
 		const exsisitingServers = new Array
-		// console.log(servers)
 		servers.forEach(server => exsisitingServers.push(server.dataValues.uuid))
 		response.forEach(element => {
 			if(!exsisitingServers.includes(element.attributes.uuid)){

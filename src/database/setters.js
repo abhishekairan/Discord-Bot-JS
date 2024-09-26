@@ -1,7 +1,7 @@
 const { Servers } = require('./models')
 
 
-async function addServer(id,uuid,name,identifier) {
+function addServer(id,uuid,name,identifier) {
     Servers.create({
         id: id,
         uuid: uuid,
