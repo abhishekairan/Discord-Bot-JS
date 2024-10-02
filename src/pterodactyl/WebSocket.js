@@ -1,7 +1,5 @@
 const WebSocket = require('ws')
 const { panel } = require('../config.json');
-const { messageLink } = require('discord.js');
-const { getserverbyname } = require('../database/getter');
 
 // Function to clear string br remove the console sttributes
 function cleanString(input) {

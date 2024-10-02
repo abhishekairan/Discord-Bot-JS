@@ -48,7 +48,7 @@ module.exports= {
                 ws.close()
             }
             // Checking if the user has enough money to pay the player and taking the amount from the user 
-            else if(consoleMSG.includes(`Balance of ${user.nickname}:`)){
+            else if(cleanstr.includes(`Balance of`) && cleanstr.includes(` ${user.nickname}`)){
                 const balstr = cleanstr.split(' ')
                 const userbal = balstr[balstr.length-1]
                 balance = parseFloat(userbal.replace(/[$,]/g, ''))
@@ -60,7 +60,7 @@ module.exports= {
                 }
             }
             // if the amount is deducated from the user then paying the amount to the player 
-            else if(cleanstr.includes(`taken from ${user.nickname}`)){
+            else if(cleanstr.includes(`taken from`) && cleanstr.includes(`${user.nickname}`)){
                 const deductamountstr = cleanstr.split(' ')
                 // console.log(deductamountstr[deductamountstr.length-1]);
                 balance = parseFloat(deductamountstr[deductamountstr.length-1])
@@ -68,7 +68,7 @@ module.exports= {
                 ws.send(JSON.stringify({'event':'send command','args':[`eco give ${player.nickname} ${amount}`]}))
             }
             // if player recived the money replying to them
-            else if(cleanstr.includes(`added to ${player.nickname}`)){
+            else if(cleanstr.includes(`added to`) && cleanstr.includes(`${player.nickname}`)){
                 const msgarg = cleanstr.split(' ')
                 interaction.editReply({content:`Paid ${msgarg[0]} to ${player}`,ephemeral:false})
                 const embed = new EmbedBuilder().setTimestamp().setDescription(`${user.nickname} paid ${amount} to ${player.nickname}`)
