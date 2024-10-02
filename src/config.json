@@ -7,7 +7,8 @@
     "roles": {
         "manager":"910871355807891466",
         "head_developer": "1065966980345102346",
-        "linked": "1280516472208363570"
+        "linked": "1280516472208363570",
+        "team":"1274693920801947658"
     },
     "logChannels":{
         "pay": "1283412218041339984"
@@ -19,5 +20,9 @@
         "CLIENTKEY": "ptlc_Iy6Fdj1g9FWyZq37C50zKOKUjKmrXecyyfIYtKrckrF",
         "APPLICATIONKEY": "ptla_zDs5In67MbY2Y6xxIdYmha9Hs4p1sdoYtfblSpIrk5q",
         "URL":"https://panel.clubcolony.in"
+    },
+    "colors":{
+        "red":"F60002",
+        "green": "48AF40"
     }
 }
