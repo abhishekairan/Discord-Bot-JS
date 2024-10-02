@@ -30,12 +30,12 @@ module.exports= {
         const logchannel = await interaction.guild.channels.fetch(logChannels.pay) // Channel which will log the transactions
         let balance = 0// Balance of the user after paying
         if(!(user.roles.cache.has(roles.linked)) || !(player.roles.cache.has(roles.linked))){
-            return interaction.reply({content:"Player not found. Make sure you both have linked your account!!!",ephemeral:true})
+            return interaction.reply({content:`Make sure you both have linked your account!!!`})
         }
         const ws = await getWebSocket(uuid) // Web socket connection to communicate with server 
 
         // Defering the interaction reply to edit it later according to the conditions 
-        await interaction.deferReply({ephemeral:true})
+        await interaction.deferReply()
 
         // Adding a consoleMessage listner to websocket which will perform the authnetications and processes
         ws.on('consoleMessage', (e) => {
@@ -44,7 +44,7 @@ module.exports= {
             console.log(cleanstr) // Printing the actuall message to the console
             // Checking if user exsist or not
             if(consoleMSG.includes("Player not found")){
-                interaction.editReply({content:"Player not found. Make sure you both have linked your account!!!",ephemeral:true})
+                interaction.editReply({content:`Make sure you and ${player.nickname} both have linked your account!!!`})
                 ws.close()
             }
             // Checking if the user has enough money to pay the player and taking the amount from the user 
@@ -55,7 +55,7 @@ module.exports= {
                 if(balance>amount){
                     ws.send(JSON.stringify({'event':'send command','args':[`eco take ${user.nickname} ${amount}`]}))
                 }else{
-                    interaction.editReply({content:`You are broke to perform this transaction`,ephemeral:true})
+                    interaction.editReply({content:`You are broke to perform this transaction`})
                     ws.close()
                 }
             }
@@ -70,7 +70,7 @@ module.exports= {
             // if player recived the money replying to them
             else if(cleanstr.includes(`added to`) && cleanstr.includes(`${player.nickname}`)){
                 const msgarg = cleanstr.split(' ')
-                interaction.editReply({content:`Paid ${msgarg[0]} to ${player}`,ephemeral:false})
+                interaction.editReply({content:`Paid ${msgarg[0]} to ${player}`})
                 const embed = new EmbedBuilder().setTimestamp().setDescription(`${user.nickname} paid ${amount} to ${player.nickname}`)
                 ws.close()  
                 logchannel.send({embeds:[embed]}) 
