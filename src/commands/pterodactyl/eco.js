@@ -1,0 +1,100 @@
+const { SlashCommandBuilder, EmbedBuilder, Embed } = require('discord.js')
+const { roles, colors,logChannels } = require('../../config.json')
+const { getWebSocket, cleanString } = require('../../pterodactyl/WebSocket')
+const { getserverbyname } = require('../../database/getter')
+const pteraconsole = require('../../pterodactyl/console')
+
+module.exports = {
+    data: new SlashCommandBuilder()
+        .setName('eco')
+        .setDescription("Edit the amount of a player has")
+        .addStringOption(option => option
+            .setName('action')
+            .setDescription('Action to perform')
+            .setRequired(true)
+            .addChoices(
+                { name: 'give', value: 'give' },
+                { name: 'take', value: 'take' },
+                { name: 'set', value: 'set' },
+                { name: 'reset', value: 'reset' },
+            )
+        )
+        .addUserOption(option => option
+            .setName('player')
+            .setDescription(`The player's money you want to edit`)
+            .setRequired(true)
+        )
+        .addIntegerOption(option => option
+            .setName('amount')
+            .setDescription('The amount of money you want to give/take/set')
+            .setRequired(true)
+        ),
+
+    async execute(interaction){
+        const player = await interaction.guild.members.fetch(interaction.options.getUser('player').id)
+        const amount = interaction.options.getInteger('amount')
+        const action = interaction.options.getString('action')
+        if (interaction.member.roles.cache.has(roles.manager)){
+            if(!player.roles.cache.has(roles.linked)){
+                const embed = new EmbedBuilder().setTitle("Player not linked").setDescription(`${player} has not linekd his account yet. Can't perform the transaction`).setColor(colors.red)
+                return interaction.reply({embeds: [embed]})
+            }
+            const {uuid} = await getserverbyname("CCS")
+            const ws = await getWebSocket(uuid)
+            const logchannel = await interaction.guild.channels.fetch(logChannels.pay) // Channel which will log the transactions
+            await interaction.deferReply()
+            const logEmbed = new EmbedBuilder().setTitle("Transaction Log").setAuthor({name:`${interaction.member.displayName}`,iconURL:interaction.member.displayAvatarURL()}).setTimestamp()
+
+            
+            ws.on('consoleMessage',(e) => {
+                const consoleMSG = e.data
+                const cleanstr = cleanString(consoleMSG)
+                // Checking if user exsist or not
+                if(consoleMSG.includes("Player not found")){
+                    interaction.editReply({content:`Make sure ${player.nickname} have linked your account!!!`})
+                    ws.close()
+                }
+                // if the amount is taken from the user 
+                else if(cleanstr.includes(`taken from`) && cleanstr.includes(`${player.nickname}`)){
+                    const embed = new EmbedBuilder()
+                    embed.setTitle("Transaction Successfull").setDescription(cleanstr).setColor(colors.green)
+                    interaction.editReply({embeds: [embed]})
+                    ws.close()
+                    logEmbed.setDescription(cleanstr)
+                    logchannel.send({embeds:[logEmbed]})
+                }
+                // if player recived the money
+                else if(cleanstr.includes(`added to`) && cleanstr.includes(`${player.nickname}`)){
+                    const embed = new EmbedBuilder()
+                    embed.setTitle("Transaction Successfull").setDescription(cleanstr).setColor(colors.green)
+                    interaction.editReply({embeds: [embed]})
+                    ws.close()
+                    logEmbed.setDescription(cleanstr)
+                    logchannel.send({embeds:[logEmbed]}) 
+                }
+                // if player money set/reset
+                else if(cleanstr.includes(`You set`) && cleanstr.includes(`${player.nickname}'s`)){
+                    const embed = new EmbedBuilder()
+                    embed.setTitle("Transaction Successfull").setDescription(cleanstr).setColor(colors.green)
+                    interaction.editReply({embeds: [embed]})
+                    ws.close()
+                    logEmbed.setDescription(cleanstr)
+                    logchannel.send({embeds:[logEmbed]}) 
+                }
+            })
+            if (action == 'give'){
+                pteraconsole(uuid,`eco give ${player.nickname} ${amount}`)
+            }else if (action == 'take'){
+                pteraconsole(uuid,`eco take ${player.nickname} ${amount}`)
+            }else if (action == 'set'){
+                pteraconsole(uuid,`eco set ${player.nickname} ${amount}`)
+            }else if (action == 'reset'){
+                pteraconsole(uuid,`eco reset ${player.nickname} ${amount}`)
+            }
+        }else{
+            const embed = new EmbedBuilder().setTitle("Permission Denied").setDescription("Only Managers are allowed to use this command")
+            return interaction.reply({embeds: [embed]})
+        }
+
+    }
+}
