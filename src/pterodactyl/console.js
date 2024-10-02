@@ -1,28 +1,32 @@
 const { SlashCommandBuilder } = require('discord.js')
 const axios = require('axios')
+const { panel } = require('../config.json')
 
 
+const ClientKey = panel.CLIENTKEY
+const ClientURL = panel.ClientURL
 
-
-async function sendCommandToPterodactyl(serverId, command, apiKey) {
+async function sendCommandToPterodactyl(serverId, command) {
     try {
-        const response = await axios.post(`https://panel.clubcolony.in/api/client/servers/${serverId}/command`, {
+        const response = await axios.post(`${ClientURL}/servers/${serverId}/command`, {
             command: command
     }, {
         headers: {
-          Authorization: `Bearer ${apiKey}`
+          Authorization: `Bearer ${ClientKey}`
         }
     });
-  
-        console.log(`Response is : ${response.data}`);
+        // console.log(`Response is : ${response.data}`);
+        return response.data;
     } catch (error) {
         console.error('Error sending command:', error);
     }
 }
   
 // Replace with your actual server ID and API key
-const serverId = '228b5e70-d891-4179-a0db-6fcfc66ff054';
-const apiKey = 'ptlc_ytuuj0jdGuBx4iG8ypkpFWobX4IApIAUOUfWi7S5Krd';
-const command = 'say Hello, world!';
 
-sendCommandToPterodactyl(serverId, command, apiKey);
+
+
+module.exports = async (serverId, command) => {
+    const response = await sendCommandToPterodactyl(serverId, command)
+    return response
+}

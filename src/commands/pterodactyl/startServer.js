@@ -1,13 +1,17 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const getter = require('../../database/getter');
 require('dotenv').config();
 const power = require('../../pterodactyl/power');
+const pteroconsole = require('../../pterodactyl/console')
+const { panel } = require('../../config.json')
+
 
 
 module.exports = {
     data: new SlashCommandBuilder()
     .setName("server")
     .setDescription("Server name")
+    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
     // sub command for power action on servers
     .addSubcommand(subcommand => subcommand
         .setName('power')
@@ -62,12 +66,16 @@ module.exports = {
         const server = await getter.getserverbyname(servername)
         // console.log(server)
         if (server) {
-            const serveridentifier = server.dataValues.identifier
+            const serveridentifier = server.dataValues.uuid
+            // console.log(server)
+            // console.log(serveridentifier)
             const action = interaction.options.getString('action')
             if (cmd === "power"){
                 if (action === 'start'){
                     response = await power.start(serveridentifier)
-                    console.log(response)
+                    pteroconsole.log(response)
+                    response = await Client.startServer(serveridentifier)
+                    pteroconsole.log(response)
                     embed.setDescription(`Starting ${servername}`)
                     embed.setColor('48AF40')
                     await interaction.reply({embeds: [embed] })
@@ -87,6 +95,28 @@ module.exports = {
                     embed.setColor('48AF40')
                     await interaction.reply({embeds: [embed] })
                 }
+            }else if(cmd === "command"){
+                const command = interaction.options.getString('command')
+                const response = await pteroconsole(serveridentifier, command)
+                const req = await fetch(`https://panel.clubcolony.in/api/client/servers/${serveridentifier}/websocket`,{ method: "GET", headers: { Authorization: `Bearer ${panel.CLIENTKEY}`,Accept: "application/json" } });
+                const res = await req.json();
+                const { token, socket } = res.data;
+                console.log(socket)
+                const ws = new WebSocket(`${socket}`)
+                ws.on('open',() => {
+                    console.log("connection established")
+                    ws.send(JSON.stringify({"event":"auth","args":[token]}))
+                })
+                ws.on('message',(msg) => {
+                    message = JSON.parse(msg)
+                    if (message.event === "console output"){
+                        console.log(removeTimestamps(message.args[0]));
+                        console.log('next Line')
+                    }
+
+                })
+                await interaction.reply(`command executed sucessfull`)
+
             }
         }else{
             embed.setDescription("Server not found")
@@ -95,3 +125,5 @@ module.exports = {
         }
     }
 }
+
+
