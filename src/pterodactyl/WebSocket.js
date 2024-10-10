@@ -1,6 +1,9 @@
 const WebSocket = require('ws')
 const { panel } = require('../config.json');
 
+
+
+
 // Function to clear string br remove the console sttributes
 function cleanString(input) {
     // Regular expression to match ANSI escape codes
@@ -23,14 +26,10 @@ function removeTimestamps(message) {
     return message.replace(timestampRegex, '').trim();
 }
 
-const websocketInstances = {};
 
-const websocket = async (serverid) => {
-  // Check if a WebSocket instance already exists for the given server ID
-  if (websocketInstances[serverid]) {
-    return websocketInstances[serverid];
-  }
-
+// function to get token and socket from the panel
+async function getSocketCredientials(serverid){
+  
   // Making fetch request to the panel to get websocket url and token 
   const req = await fetch(`${panel.ClientURL}/servers/${serverid}/websocket`, {
     method: "GET",
@@ -38,55 +37,101 @@ const websocket = async (serverid) => {
   });
   const res = await req.json(); // Converting the response got from the fetch response into json format to further access the data
   const { token, socket } = res.data; // Extracting token and socket url from the response
+  return {token,socket}
+}
 
-  // Making connection to the websocket
-  const ws = new WebSocket(`${socket}`) // websocket variable 
 
-  // Create a promise that resolves when the authentication is successful
-  const authPromise = new Promise((resolve, reject) => {
-    // WebSocket events
-    // when connection is established  
-    ws.on('open', () => { 
-      console.log(`connection established to ${serverid}`)
-      ws.send(JSON.stringify({ "event": "auth", "args": [token] })) // Authenticating websocket from token we got back from fetch request
+
+
+class Websocket extends WebSocket{
+    
+  constructor(creds){
+    super(creds.socket) // setting up socket url
+
+    // Authentication event
+    this.on('open',()=>{
+      console.log(`connection established to Websocket`)
+      this.send(JSON.stringify({ "event": "auth", "args": [creds.token] })) // Authenticating websocket from token we got back from fetch request
     })
-    // on closing websocket
-    ws.on('close', () => {
-      console.log('connection closed')
-      // Remove the WebSocket instance from the cache when it's closed
-      delete websocketInstances[serverid];
-    })
-    // when a new event is fired
-    ws.on('message', (msg) => {
-      message = JSON.parse(msg) // Converting the event from buffer to json formate
+
+    
+    // Registering consolemessage emiter 
+    this.on('message', (msg) => {
+      const message = JSON.parse(msg) // Converting the event from buffer to json formate
       // console.log(message);
       if (message.event === "auth success") {
         console.log('auth success');
-        resolve(ws); // Resolve the promise with the WebSocket connection
       }
       if (message.event === "console output") { // Checking if the event is a console output?
         const mssg = removeTimestamps(message.args[0])
-        ws.emit('consoleMessage', { data: mssg })
+        this.emit('consoleMessage', { data: mssg })
       } 
     })
-    ws.on('error', (e) => {
-      reject(e); // Reject the promise with the error
+  }
+
+  // Function to set listner player not found 
+  async setBalanceListner(user){
+    // Adding a consoleMessage listner to websocket which will perform the authnetications and processes
+    this.on('consoleMessage', (e) => {
+      const cleanstr = cleanString(e.data)
+      // Checking if the user has enough money to pay the player and taking the amount from the user 
+      if(cleanstr.includes(`Balance of`) && cleanstr.includes(` ${user}`)){
+          const balstr = cleanstr.split(' ')
+          const userbal = balstr[balstr.length-1]
+          const balance = parseFloat(userbal.replace(/[$,]/g, ''))
+          this.emit('balanceof',{balance: balance, message: cleanstr})
+      }
     })
-  });
+    return this
+  }
 
-  // Store the WebSocket instance in the cache
-  websocketInstances[serverid] = authPromise;
+  
+  // Function to add listner for eco command
+  setEcoListners(){
 
-  // Return the promise that resolves with the WebSocket connection
-  return authPromise;
+    console.log("Setting events for ws");
+    this.on('consoleMessage',(e) => {
+      const consoleMSG = e.data
+      const cleanstr = cleanString(consoleMSG)
+  
+      // Checking if user exsist or not
+      if(consoleMSG.includes("Player not found")){
+        this.emit('player not found')
+        this.close()
+      }
+  
+      // Checking if the user balance is checked 
+      else if(cleanstr.includes(`Balance of`)){
+        const balstr = cleanstr.split(' ')
+        const userbal = balstr[balstr.length-1]
+        const balance = parseFloat(userbal.replace(/[$,]/g, ''))
+        this.emit('balanceof',{balance: balance, message: cleanstr})
+      }
+  
+      // if the amount is taken from the user 
+      else if(cleanstr.includes(`taken from`)){
+        console.log("Found taken from");
+        const amount = parseFloat(cleanstr.split(' ')[0].replace(/[$,]/g, ''))
+        this.emit('eco taken',{amount: amount, message: cleanstr})
+      }
+  
+      // if player recived the money
+      else if(cleanstr.includes(`added to`)){
+        const amount = parseFloat(cleanstr.split(' ')[0].replace(/[$,]/g, ''))
+        this.emit('eco recived',{amount: amount, message: cleanstr}) 
+      }
+  
+      // if player money set/reset
+      else if(cleanstr.includes(`You set`)){
+        const splitemsg = cleanstr.split(' ')
+        const amount = parseFloat(splitemsg[splitemsg.length-1].replace(/[$,.]/g, ''))
+        this.emit('eco set',{amount: amount, message: cleanstr}) 
+      }
+    })
+    return this
+  }
 }
 
-
-// Function to get websocket connection from serverid
-async function getWebSocket(serverid){
-    const ws =await websocket(serverid)
-    return ws
-}
 
 module.exports = {
-    getWebSocket: getWebSocket, removeTimestamps: removeTimestamps,cleanString:cleanString}
+    removeTimestamps: removeTimestamps,cleanString:cleanString,Websocket: Websocket, getSocketCredientials: getSocketCredientials}

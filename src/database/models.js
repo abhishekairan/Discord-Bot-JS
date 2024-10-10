@@ -20,7 +20,29 @@ const Servers = Database.define('servers', {
 })
 
 
+const Money = Database.define('money', {
+	id: {
+		type: DataTypes.INTEGER,
+		primaryKey: true
+	},
+	userID: {
+		type: DataTypes.INTEGER,
+		allowNull: false
+	},
+	amount: {
+		type: DataTypes.INTEGER,
+		allowNull: false,
+	},
+	date: {
+		type: DataTypes.DATE,
+		allowNull: false
+	},
+	cost: {
+		type: DataTypes.INTEGER,
+		allowNull: false
+	}
 
+})
 
 
 module.exports = {Database,Servers}

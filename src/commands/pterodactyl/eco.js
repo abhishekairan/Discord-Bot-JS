@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, Embed } = require('discord.js')
 const { roles, colors,logChannels } = require('../../config.json')
-const { getWebSocket, cleanString } = require('../../pterodactyl/WebSocket')
+const { getSocketCredientials,Websocket } = require('../../pterodactyl/WebSocket')
 const { getserverbyname } = require('../../database/getter')
 const pteraconsole = require('../../pterodactyl/console')
 
@@ -40,48 +40,56 @@ module.exports = {
                 return interaction.reply({embeds: [embed]})
             }
             const {uuid} = await getserverbyname("CCS")
-            const ws = await getWebSocket(uuid)
+            const creds = await getSocketCredientials(uuid)
+            const ws = await new Websocket(creds).setEcoListners()
             const logchannel = await interaction.guild.channels.fetch(logChannels.pay) // Channel which will log the transactions
+
             await interaction.deferReply()
             const logEmbed = new EmbedBuilder().setTitle("Transaction Log").setAuthor({name:`${interaction.member.displayName}`,iconURL:interaction.member.displayAvatarURL()}).setTimestamp()
 
-            
-            ws.on('consoleMessage',(e) => {
-                const consoleMSG = e.data
-                const cleanstr = cleanString(consoleMSG)
-                // Checking if user exsist or not
-                if(consoleMSG.includes("Player not found")){
-                    interaction.editReply({content:`Make sure ${player.nickname} have linked your account!!!`})
-                    ws.close()
-                }
-                // if the amount is taken from the user 
-                else if(cleanstr.includes(`taken from`) && cleanstr.includes(`${player.nickname}`)){
+            // player not found listner
+            ws.on('player not found',(e) => {
+                interaction.editReply({content:`Make sure ${player.nickname} have linked your account!!!`})
+                ws.close()
+            })
+
+            // Money add listner
+            ws.on('eco recived',(data) => {
+                if(data.message.includes(`${player.nickname}` && amount === data.amount)){
                     const embed = new EmbedBuilder()
-                    embed.setTitle("Transaction Successfull").setDescription(cleanstr).setColor(colors.green)
-                    interaction.editReply({embeds: [embed]})
-                    ws.close()
-                    logEmbed.setDescription(cleanstr)
-                    logchannel.send({embeds:[logEmbed]})
-                }
-                // if player recived the money
-                else if(cleanstr.includes(`added to`) && cleanstr.includes(`${player.nickname}`)){
-                    const embed = new EmbedBuilder()
-                    embed.setTitle("Transaction Successfull").setDescription(cleanstr).setColor(colors.green)
-                    interaction.editReply({embeds: [embed]})
-                    ws.close()
-                    logEmbed.setDescription(cleanstr)
-                    logchannel.send({embeds:[logEmbed]}) 
-                }
-                // if player money set/reset
-                else if(cleanstr.includes(`You set`) && cleanstr.includes(`${player.nickname}'s`)){
-                    const embed = new EmbedBuilder()
-                    embed.setTitle("Transaction Successfull").setDescription(cleanstr).setColor(colors.green)
+                    embed.setTitle("Transaction Successfull").setDescription(data.message).setColor(colors.green)
                     interaction.editReply({embeds: [embed]})
                     ws.close()
                     logEmbed.setDescription(cleanstr)
                     logchannel.send({embeds:[logEmbed]}) 
                 }
             })
+
+            // Money taken listner
+            ws.on('eco taken',(data)=>{
+                console.log(data);
+                if(data.message.includes(`${player.nickname}`) && amount === data.amount){
+                    const embed = new EmbedBuilder()
+                    embed.setTitle("Transaction Successfull").setDescription(data.message).setColor(colors.green)
+                    interaction.editReply({embeds: [embed]})
+                    ws.close()
+                    logEmbed.setDescription(data.message)
+                    logchannel.send({embeds:[logEmbed]})
+                }
+            })
+
+            // Money set listner
+            ws.on('eco set',(data)=>{
+                if(data.message.includes(`${player.nickname}'s` && amount === data.amount)){
+                    const embed = new EmbedBuilder()
+                    embed.setTitle("Transaction Successfull").setDescription(data.message).setColor(colors.green)
+                    interaction.editReply({embeds: [embed]})
+                    ws.close()
+                    logEmbed.setDescription(data.message)
+                    logchannel.send({embeds:[logEmbed]}) 
+                }
+            })
+
             if (action == 'give'){
                 pteraconsole(uuid,`eco give ${player.nickname} ${amount}`)
             }else if (action == 'take'){

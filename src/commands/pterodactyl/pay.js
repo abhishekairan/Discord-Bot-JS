@@ -1,8 +1,8 @@
 const { SlashCommandBuilder, EmbedBuilder, userMention } = require('discord.js')
-const { getWebSocket,cleanString } = require('../../pterodactyl/WebSocket')
+const { Websocket,cleanString, getSocketCredientials } = require('../../pterodactyl/WebSocket')
 const  { getserverbyname } = require('../../database/getter')
 const pteroconsole = require('../../pterodactyl/console')
-const { logChannels, roles } = require('../../config.json')
+const { logChannels, roles, colors } = require('../../config.json')
 
 
 
@@ -32,50 +32,44 @@ module.exports= {
         if(!(user.roles.cache.has(roles.linked)) || !(player.roles.cache.has(roles.linked))){
             return interaction.reply({content:`Make sure you both have linked your account!!!`})
         }
-        const ws = await getWebSocket(uuid) // Web socket connection to communicate with server 
+        const creds = await getSocketCredientials(uuid)
+        const ws = await new Websocket(creds).setEcoListners().setBalanceListner() // Web socket connection to communicate with server 
 
         // Defering the interaction reply to edit it later according to the conditions 
         await interaction.deferReply()
 
         // Adding a consoleMessage listner to websocket which will perform the authnetications and processes
-        ws.on('consoleMessage', (e) => {
-            const consoleMSG = e.data // Getting current console message which has been send
-            const cleanstr = cleanString(e.data) // Clearning the string by removing all the text formating
-            console.log(cleanstr) // Printing the actuall message to the console
-            // Checking if user exsist or not
-            if(consoleMSG.includes("Player not found")){
-                interaction.editReply({content:`Make sure you and ${player.nickname} both have linked your account!!!`})
-                ws.close()
-            }
-            // Checking if the user has enough money to pay the player and taking the amount from the user 
-            else if(cleanstr.includes(`Balance of`) && cleanstr.includes(` ${user.nickname}`)){
-                const balstr = cleanstr.split(' ')
-                const userbal = balstr[balstr.length-1]
-                balance = parseFloat(userbal.replace(/[$,]/g, ''))
-                if(balance>amount){
-                    ws.send(JSON.stringify({'event':'send command','args':[`eco take ${user.nickname} ${amount}`]}))
+
+        // Checking the balance of user to performance the transaction, if user have enough balance deduct the amount to be paid from the user account
+        ws.on('balanceof',(data)=>{
+            if(data.message.includes(`${user.nickname}`)){
+                if(data.balance>=amount){
+                    ws.send(JSON.stringify({'event':'send command','args':[`eco take ${user.nickname} ${amount}`]})) // Deducting the amount from the user 
                 }else{
-                    interaction.editReply({content:`You are broke to perform this transaction`})
-                    ws.close()
+                    interaction.editReply({content:`You are broke to perform this transaction`}) // User is broke
+                    ws.close() // Closing connection 
                 }
             }
-            // if the amount is deducated from the user then paying the amount to the player 
-            else if(cleanstr.includes(`taken from`) && cleanstr.includes(`${user.nickname}`)){
-                const deductamountstr = cleanstr.split(' ')
-                // console.log(deductamountstr[deductamountstr.length-1]);
-                balance = parseFloat(deductamountstr[deductamountstr.length-1])
-                // console.log(newbalance);
-                ws.send(JSON.stringify({'event':'send command','args':[`eco give ${player.nickname} ${amount}`]}))
-            }
-            // if player recived the money replying to them
-            else if(cleanstr.includes(`added to`) && cleanstr.includes(`${player.nickname}`)){
-                const msgarg = cleanstr.split(' ')
-                interaction.editReply({content:`Paid ${msgarg[0]} to ${player}`})
-                const embed = new EmbedBuilder().setTimestamp().setDescription(`${user.nickname} paid ${amount} to ${player.nickname}`)
-                ws.close()  
-                logchannel.send({embeds:[embed]}) 
+        })
+
+        // Checking if user money is deducted or not
+        ws.on("eco taken",(data)=>{
+            if(data.message.includes(`${user.nickname}`) && data.amount === amount){
+                ws.send(JSON.stringify({'event':'send command','args':[`eco give ${player.nickname} ${amount}`]})) 
             }
         })
+
+        // Checking if player recived money or not
+        ws.on('eco recived',(data)=>{
+            if(data.message.includes(`${player.nickname}`) && data.amount === amount){
+                const embed = new EmbedBuilder().setTitle("Transaction Successfull").setDescription(`Paid ${data.message.split(' ')[0]} to ${player}`).setColor(colors.green)
+                interaction.editReply({embeds: [embed]})
+                const logembed = new EmbedBuilder().setTimestamp().setDescription(`${user.nickname} paid ${amount} to ${player.nickname}`)
+                ws.close()  
+                logchannel.send({embeds:[logembed]}) 
+            }
+        })
+
         await pteroconsole(uuid,`bal ${user.nickname}`)
     }
 
