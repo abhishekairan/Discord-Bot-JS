@@ -33,7 +33,7 @@ module.exports= {
             return interaction.reply({content:`Make sure you both have linked your account!!!`})
         }
         const creds = await getSocketCredientials(uuid)
-        const ws = await new Websocket(creds).setEcoListners().setBalanceListner() // Web socket connection to communicate with server 
+        const ws = await new Websocket(creds).setEcoListners() // Web socket connection to communicate with server 
 
         // Defering the interaction reply to edit it later according to the conditions 
         await interaction.deferReply()

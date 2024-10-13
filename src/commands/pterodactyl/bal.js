@@ -1,7 +1,7 @@
 const pteroconsole = require('../../pterodactyl/console')
 const { SlashCommandBuilder, EmbedBuilder, Embed } = require('discord.js')
 const { roles,colors } = require('../../config.json') 
-const { getWebSocket, cleanString } = require('../../pterodactyl/WebSocket')
+const { Websocket,getSocketCredientials } = require('../../pterodactyl/WebSocket')
 const { getserverbyname } = require('../../database/getter')
 
 module.exports = {
@@ -39,31 +39,30 @@ module.exports = {
         // checking wheather the user has linekd role or command user has the team role
         if (player.roles.cache.has(roles.linked) || interaction.member.roles.cache.has(roles.team)){
             const {uuid} = await getserverbyname("CCS")
-            const ws = await getWebSocket(uuid)
+            const creds = await getSocketCredientials(uuid)
+            const ws = await new Websocket(creds).setEcoListners()
             await interaction.deferReply()
-            ws.on('consoleMessage',(e) => {
-                const consoleMSG = e.data // Getting current console message which has been send
-                const cleanstr = cleanString(e.data) // Clearning the string by removing all the text formating
-            
-                // Checking if user exsist or not
-                if(consoleMSG.includes("Player not found")){
-                    const embed = new EmbedBuilder()
-                        .setTitle("Player Not Found")
-                        .setDescription(`Make sure you have linked your account!!!`)
-                        .setColor(colors.red)
-                    interaction.editReply({embeds: [embed]})
-                    ws.close()
-                }
 
-                // Checking if the user balance 
-                if(cleanstr.includes(`Balance of`) && cleanstr.includes(` ${player.nickname}`)){
+            ws.on('balanceof',(e)=>{
+                if(e.message.includes(player.nickname)){
                     const embed = new EmbedBuilder()
-                        .setDescription(cleanstr)
+                        .setDescription(e.message)
                         .setColor(colors.green)
                     interaction.editReply({embeds:[embed]})
                     ws.close()
+                    return
                 }
             })
+
+            ws.on('player not found',()=>{
+                const embed = new EmbedBuilder()
+                    .setTitle("Player Not Found")
+                    .setDescription(`Make sure you have linked your account!!!`)
+                    .setColor(colors.red)
+                interaction.editReply({embeds: [embed]})
+                ws.close()
+            })
+
             try{
                 await pteroconsole(uuid,`bal ${player.nickname}`) // sending the balance command to the server
             }catch{
