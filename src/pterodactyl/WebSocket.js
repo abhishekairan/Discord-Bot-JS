@@ -69,22 +69,6 @@ class Websocket extends WebSocket{
     })
   }
 
-  // Function to set listner player not found 
-  async setBalanceListner(user){
-    // Adding a consoleMessage listner to websocket which will perform the authnetications and processes
-    this.on('consoleMessage', (e) => {
-      const cleanstr = cleanString(e.data)
-      // Checking if the user has enough money to pay the player and taking the amount from the user 
-      if(cleanstr.includes(`Balance of`) && cleanstr.includes(` ${user}`)){
-          const balstr = cleanstr.split(' ')
-          const userbal = balstr[balstr.length-1]
-          const balance = parseFloat(userbal.replace(/[$,]/g, ''))
-          this.emit('balanceof',{balance: balance, message: cleanstr})
-      }
-    })
-    return this
-  }
-
   
   // Function to add listner for eco command
   setEcoListners(){

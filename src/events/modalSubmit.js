@@ -14,8 +14,12 @@ module.exports = {
             const msg = interaction.message
             const embed = new EmbedBuilder(msg.embeds[0])
             
-            // console.log(embed)
-            embed.addFields( {name: "Answer", value:answer ,inline: false}).setColor('00ff00')
+            
+            if(embed.data.fields){
+                embed.data.fields = [{name: "Answer", value:answer ,inline: false}]
+            }else{
+                embed.addFields( {name: "Answer", value:answer ,inline: false}).setColor('00ff00')
+            }
             // await msg.edit({embeds: [embed],components: []})
             
             await msg.edit({embeds: [embed]})

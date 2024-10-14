@@ -1,5 +1,5 @@
 const { Events } = require('discord.js')
-const ModelBuilder = require('../utils/models.js')
+const ModelBuilder = require('../utils/componenets/models')
 const { roles } = require('../config.json')
 
 module.exports = {
