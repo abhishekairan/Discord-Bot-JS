@@ -22,7 +22,7 @@ const rankStore = new EmbedBuilder()
     .addFields([
         {name:"Knight", value: "> 50₹ [1 Week]\n> 150₹ [1 month]\n> 250₹ [2 months]\n> 400₹: [3 months]", inline: false},
         {name:"Warrior", value: "> 150₹ [1 Week]\n> 500₹ [1 month]\n> 900₹ [2 months]\n> 1300₹: [3 months]", inline: false},
-        {name:"Knight", value: "> 250₹ [1 Week]\n> 650₹ [1 month]\n> 1200₹ [2 months]\n> 1800₹: [3 months]", inline: false},
+        {name:"Emperor", value: "> 250₹ [1 Week]\n> 650₹ [1 month]\n> 1200₹ [2 months]\n> 1800₹: [3 months]", inline: false},
         {name:"Details",value:"[Click Here to see full details](https://cdn.discordapp.com/attachments/933705643959910420/1295355783302615114/image.png?ex=670e5995&is=670d0815&hm=330d006b33f8d196639171c06021dabb8c41b0b7ea3237ff2612e850fcf4f041&)"}
     ])
     // .setImage('https://cdn.discordapp.com/attachments/933705643959910420/1295355783302615114/image.png?ex=670e5995&is=670d0815&hm=330d006b33f8d196639171c06021dabb8c41b0b7ea3237ff2612e850fcf4f041&')

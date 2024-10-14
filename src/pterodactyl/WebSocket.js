@@ -55,6 +55,12 @@ class Websocket extends WebSocket{
     })
 
     
+    // Closing event
+    this.on('close',()=>{
+      console.log(`connection closed to Websocket`)
+    })
+
+    
     // Registering consolemessage emiter 
     this.on('message', (msg) => {
       const message = JSON.parse(msg) // Converting the event from buffer to json formate
@@ -104,7 +110,6 @@ class Websocket extends WebSocket{
         const amount = parseFloat(cleanstr.split(' ')[0].replace(/[$,]/g, ''))
         this.emit('eco recived',{amount: amount, message: cleanstr}) 
       }
-  
       // if player money set/reset
       else if(cleanstr.includes(`You set`)){
         const splitemsg = cleanstr.split(' ')

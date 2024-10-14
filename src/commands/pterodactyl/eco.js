@@ -39,12 +39,13 @@ module.exports = {
                 const embed = new EmbedBuilder().setTitle("Player not linked").setDescription(`${player} has not linekd his account yet. Can't perform the transaction`).setColor(colors.red)
                 return interaction.reply({embeds: [embed]})
             }
+            await interaction.deferReply()
+
             const {uuid} = await getserverbyname("CCS")
             const creds = await getSocketCredientials(uuid)
             const ws = await new Websocket(creds).setEcoListners()
             const logchannel = await interaction.guild.channels.fetch(logChannels.pay) // Channel which will log the transactions
 
-            await interaction.deferReply()
             const logEmbed = new EmbedBuilder().setTitle("Transaction Log").setAuthor({name:`${interaction.member.displayName}`,iconURL:interaction.member.displayAvatarURL()}).setTimestamp()
 
             // player not found listner
@@ -55,19 +56,19 @@ module.exports = {
 
             // Money add listner
             ws.on('eco recived',(data) => {
-                if(data.message.includes(`${player.nickname}` && amount === data.amount)){
+                console.log(data);
+                if(data.message.includes(`${player.nickname}`) && amount === data.amount){
                     const embed = new EmbedBuilder()
                     embed.setTitle("Transaction Successfull").setDescription(data.message).setColor(colors.green)
                     interaction.editReply({embeds: [embed]})
                     ws.close()
-                    logEmbed.setDescription(cleanstr)
+                    logEmbed.setDescription(data.message)
                     logchannel.send({embeds:[logEmbed]}) 
                 }
             })
 
             // Money taken listner
             ws.on('eco taken',(data)=>{
-                console.log(data);
                 if(data.message.includes(`${player.nickname}`) && amount === data.amount){
                     const embed = new EmbedBuilder()
                     embed.setTitle("Transaction Successfull").setDescription(data.message).setColor(colors.green)
@@ -99,6 +100,11 @@ module.exports = {
             }else if (action == 'reset'){
                 pteraconsole(uuid,`eco reset ${player.nickname} ${amount}`)
             }
+            setTimeout(async () => {
+                try {
+                    ws.close()  
+                } catch (error) {}
+            }, 10000);
         }else{
             const embed = new EmbedBuilder().setTitle("Permission Denied").setDescription("Only Managers are allowed to use this command")
             return interaction.reply({embeds: [embed]})
