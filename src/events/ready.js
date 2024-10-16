@@ -1,6 +1,6 @@
 const { Events } = require('discord.js');
 const { Database, Servers } = require('../database/models')
-const getservers = require('../pterodactyl/getservers')
+const getservers = require('../pterodactyl-api/Application/getservers')
 const getter = require('../database/getter')
 const setters = require('../database/setters')
 
@@ -13,7 +13,7 @@ module.exports = {
 		Database.sync()
 		const response = await getservers()
 		const serverUUID = new Array(response)
-		const servers = await getter.getserver()
+		const servers = await getter.getservers()
 		const exsisitingServers = new Array
 		servers.forEach(server => exsisitingServers.push(server.dataValues.uuid))
 		response.forEach(element => {

@@ -1,5 +1,5 @@
 const WebSocket = require('ws')
-const { panel } = require('../config.json');
+const { panel } = require('../../config.json');
 
 
 

@@ -16,6 +16,7 @@
     "axios": "^1.7.7",
     "discord.js": "^14.16.1",
     "dotenv": "^16.4.5",
+    "mongodb": "^6.9.0",
     "node-fetch": "^3.3.2",
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7",

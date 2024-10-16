@@ -1,5 +1,5 @@
 const axios = require('axios')
-const { panel } = require('../config.json')
+const { panel } = require('../../config.json')
 
 
 const ClientKey = panel.CLIENTKEY

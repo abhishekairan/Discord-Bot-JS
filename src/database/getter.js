@@ -1,6 +1,7 @@
 const { Database, Servers } = require('./models')
 
-function getserver(uuid) {
+
+function getservers() {
   return new Promise((resolve,reject) => {
     try{
       const servers = Servers.findAll()
@@ -42,8 +43,10 @@ function getserverbyuuid(uuid) {
   })
 }
 
+
+
 module.exports = {
-  getserver: getserver,
+  getservers: getservers,
   getserverbyname: getserverbyname,
-  getserverbyuuid: getserverbyuuid
+  getserverbyuuid: getserverbyuuid,
 }

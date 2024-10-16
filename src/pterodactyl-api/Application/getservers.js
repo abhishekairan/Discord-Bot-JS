@@ -1,10 +1,12 @@
 const axios = require('axios')
-const { panel } = require('../config.json')
+const { panel } = require('../../config.json')
 
 module.exports = async (id) => {
     const ApplicationKey = panel.APPLICATIONKEY
     const ApplicationURL = panel.ApplicationURL
+    // console.log(id);
     if (id){
+        // console.log("Got the id");
         try{
             const response = await axios.get(`${ApplicationURL}/servers/${id}`,{
                 headers: {

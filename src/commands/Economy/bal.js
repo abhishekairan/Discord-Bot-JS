@@ -1,7 +1,7 @@
-const pteroconsole = require('../../pterodactyl/console')
+const pteroconsole = require('../../pterodactyl-api/Client/console')
 const { SlashCommandBuilder, EmbedBuilder, Embed } = require('discord.js')
 const { roles,colors } = require('../../config.json') 
-const { Websocket,getSocketCredientials } = require('../../pterodactyl/WebSocket')
+const { Websocket,getSocketCredientials } = require('../../pterodactyl-api/Client/WebSocket')
 const { getserverbyname } = require('../../database/getter')
 
 module.exports = {

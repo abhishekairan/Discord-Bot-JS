@@ -1,4 +1,5 @@
-const { SlashCommandBuilder , EmbedBuilder , ButtonBuilder , ButtonStyle , ActionRowBuilder } = require('discord.js')
+const { SlashCommandBuilder , EmbedBuilder , ActionRowBuilder } = require('discord.js')
+const {questionButton} = require('../../utils/componenets/buttons')
 const { Channels } = require("../../config.json")
 
 module.exports = {
@@ -8,10 +9,7 @@ module.exports = {
     async execute(interaction){
         const question = interaction.options.getString('question')
         const questionChannel = await interaction.guild.channels.fetch(Channels.question)
-        const ansBTN = new ButtonBuilder()
-            .setLabel('Answer')
-            .setStyle(ButtonStyle.Secondary)
-            .setCustomId('ansBTN')
+        const ansBTN = questionButton
         const actionRow = new ActionRowBuilder()
             .addComponents([ansBTN])
         const embed = new EmbedBuilder()

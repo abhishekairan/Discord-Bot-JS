@@ -1,6 +1,7 @@
 const { Client , GatewayIntentBits , Collection } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
+const { getservers } = require('./database/getter');
 require('dotenv').config();
 
 const client = new Client({intents: [
@@ -12,6 +13,7 @@ const client = new Client({intents: [
 
 
 client.commands = new Collection();
+client.serverNames = new Array()
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
 
@@ -43,3 +45,5 @@ for (const file of eventFiles) {
 }
 
 client.login(process.env.TOKEN)
+
+module.exports= client
