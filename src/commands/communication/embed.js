@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const {roles} = require('../../config.json')
 
 module.exports= {
     data: new SlashCommandBuilder()
@@ -58,6 +59,8 @@ module.exports= {
 
     async execute(interaction){
         
+        if(!interaction.member.roles.cache.has(roles.team)) return
+
         const channel = interaction.options.getChannel("channel")
         const title = interaction.options.getString("title")
         const description = interaction.options.getString("description")

@@ -1,6 +1,6 @@
 require('dotenv').config();
 const WebSocket = require('ws')
-const { panel } = require('../../config.json');
+const { panel,roles } = require('../../config.json');
 const getter = require('../../database/getter');
 const power = require('../../pterodactyl-api/Client/power');
 const pteroconsole = require('../../pterodactyl-api/Client/console')
@@ -61,6 +61,7 @@ module.exports = {
         )
     ),
     async execute(interaction){
+        if(!interaction.member.roles.cache.has(roles.manager)) return
         // console.log(interaction);
         const embed = new EmbedBuilder()
         const cmd = interaction.options.getSubcommand()
