@@ -14,7 +14,7 @@ module.exports = {
                 if(interaction.member.roles.cache.has(roles.manager) || interaction.member.roles.cache.has(roles.head_developer)){
 
                     const userName = interaction.user.displayName
-                    const modal = ModelBuilder("Answer?",`${userName}'s Question`,'answerModal')
+                    const modal = ModelBuilder.modal_single_field("Answer?",`${userName}'s Question`,'answerModal')
                     await interaction.showModal(modal)
 
                 }else {
