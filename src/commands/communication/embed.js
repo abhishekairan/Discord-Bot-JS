@@ -59,11 +59,14 @@ module.exports= {
 
     async execute(interaction){
         
-        if(!interaction.member.roles.cache.has(roles.team)) return
+        if(!interaction.member.roles.cache.has(roles.team)) {
+            const embed = new EmbedBuilder().setTitle("Permission Denied").setDescription("Only Team Member are allowed to use this command")
+            return interaction.reply({embeds: [embed],ephemeral: true})
+        }
 
         const channel = interaction.options.getChannel("channel")
         const title = interaction.options.getString("title")
-        const description = interaction.options.getString("description")
+        const description = interaction.options.getString("description").replace("\\n","\n")
         const image = interaction.options.getString("image")
         const color = interaction.options.getString("color")
         const author = interaction.options.getString("author")
