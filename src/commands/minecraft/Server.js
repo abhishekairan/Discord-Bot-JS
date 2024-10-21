@@ -82,25 +82,22 @@ module.exports = {
                 // If command power is selected 
                 case "power":
                     if (action === 'start'){
-                        response = await power.start(serveridentifier)
-                        // console.log(response)
-                        response = await Client.startServer(serveridentifier)
-                        // console.log(response)
+                        const response = await power.start(serveridentifier)
                         embed.setDescription(`Starting ${servername}`)
                         embed.setColor('48AF40')
                         return await interaction.reply({embeds: [embed] })
                     }else if (action === 'stop'){
-                        response = await power.stop(serveridentifier)
+                        const response = await power.stop(serveridentifier)
                         embed.setDescription(`Stoping ${servername}`)
                         embed.setColor('48AF40')
                         return await interaction.reply({embeds: [embed] })
                     }else if (action === 'kill'){
-                        response = await power.kill(serveridentifier)
+                        const response = await power.kill(serveridentifier)
                         embed.setDescription(`Killing ${servername}`)
                         embed.setColor('48AF40')
                         return await interaction.reply({embeds: [embed]})
                     }else if (action === 'restart'){
-                        response = await power.restart(serveridentifier)
+                        const response = await power.restart(serveridentifier)
                         embed.setDescription(`Restarting ${servername}`)
                         embed.setColor('48AF40')
                         return await interaction.reply({embeds: [embed] })

@@ -119,8 +119,58 @@ class Websocket extends WebSocket{
     })
     return this
   }
+  // Function for setting points emiters
+  setPointListner(){
+    this.on('consoleMessage',(e) => {
+      // ᴄʟᴜʙ ᴄᴏɪɴ fammy001 was given 100 Points.
+      
+      const consoleMSG = e.data
+      const cleanstr = cleanString(consoleMSG)
+  
+      
+      
+      // ᴄʟᴜʙ ᴄᴏɪɴ Player could not be found: faasdhoaw
+      if(consoleMSG.includes("Player could not be found:")){
+        this.emit('player not found')
+        this.close()
+      }
+      
+      else if(cleanstr.includes('ᴄʟᴜʙ ᴄᴏɪɴ'))
+
+        // ᴄʟᴜʙ ᴄᴏɪɴ fammy001 was given 100 Points.
+        if(consoleMSG.includes('given')){
+          console.log("Gave points");
+          const splitemsg = cleanstr.split(' ')
+          const amount = parseFloat(splitemsg[splitemsg.length-2].replace(/[$,.]/g, ''))
+          this.emit('point given',{amount: amount, message: cleanstr})
+        }
+
+        // ᴄʟᴜʙ ᴄᴏɪɴ Took 1 Point from fammy001.
+        if(consoleMSG.includes('Took')){  
+          console.log("took points");
+          const splitemsg = cleanstr.split(' ')
+          const amount = parseFloat(splitemsg[splitemsg.length-4].replace(/[$,.]/g, ''))
+          this.emit('point took',{amount: amount, message: cleanstr})
+        }
+
+        // ᴄʟᴜʙ ᴄᴏɪɴ Set the Points of fammy001 to 100.
+        if(consoleMSG.includes('Set')){
+          console.log("set points");
+          const splitemsg = cleanstr.split(' ')
+          const amount = parseFloat(splitemsg[splitemsg.length-1].replace(/[$,.]/g, ''))
+          this.emit('point set',{amount: amount, message: cleanstr})
+        }
+
+        // ᴄʟᴜʙ ᴄᴏɪɴ Reset the Points for fammy001.
+        if(consoleMSG.includes('Reset')){
+          console.log("Reset points");
+          this.emit('point reset',{message: cleanstr})
+        }
+    })
+    return this
+  }
 }
 
 
 module.exports = {
-    removeTimestamps: removeTimestamps,cleanString:cleanString,Websocket: Websocket, getSocketCredientials: getSocketCredientials}
+    removeTimestamps: removeTimestamps, cleanString:cleanString, Websocket: Websocket, getSocketCredientials: getSocketCredientials}
