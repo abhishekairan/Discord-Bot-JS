@@ -169,6 +169,20 @@ class Websocket extends WebSocket{
     })
     return this
   }
+
+  setLuckPermListner(){
+    this.on('consoleMessage',(e) => {
+      const consoleMSG = e.data
+      const cleanstr = cleanString(consoleMSG)
+
+      if(cleanstr.includes('[LP]')){
+        this.emit('luckperm',{message: cleanstr})
+
+      }
+
+    })
+    return this
+  }
 }
 
 

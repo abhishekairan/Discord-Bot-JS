@@ -25,9 +25,17 @@ const Money = Database.define('money', {
 		type: DataTypes.INTEGER,
 		primaryKey: true
 	},
+	type:{
+		type: DataTypes.STRING,
+		allowNull: false,
+	},
 	userID: {
 		type: DataTypes.INTEGER,
 		allowNull: false
+	},
+	cost: {
+		type: DataTypes.INTEGER,
+		allowNull: true
 	},
 	amount: {
 		type: DataTypes.INTEGER,
@@ -37,12 +45,43 @@ const Money = Database.define('money', {
 		type: DataTypes.DATE,
 		allowNull: false
 	},
-	cost: {
-		type: DataTypes.INTEGER,
-		allowNull: false
+	note:{
+		type: DataTypes.STRING,
+		allowNull: true
 	}
 
 })
 
+const Rank = Database.define('rank',{
+	id:{
+		type: DataTypes.INTEGER,
+		primaryKey: true
+	},
+	type:{
+		type: DataTypes.STRING,
+		allowNull: false,
+	},
+	duration:{
+		type: DataTypes.INTEGER,
+		allowNull: false
+	},
+	dateOfPurchase:{
+		type: DataTypes.DATE,
+		allowNull: false
+	},
+	userID: {
+		type: DataTypes.INTEGER,
+		allowNull: false
+	},
+	cost: {
+		type: DataTypes.INTEGER,
+		allowNull: true
+	},
+	note:{
+		type: DataTypes.STRING,
+		allowNull: true
+	}
+	
+})
 
-module.exports = {Database,Servers}
+module.exports = {Database,Servers,Money,Rank}

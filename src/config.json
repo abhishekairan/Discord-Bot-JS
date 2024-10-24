@@ -2,27 +2,30 @@
     "Channels": {
         "suggestion":"1283727942890819594",
         "question":"1068045699268227102",
-        "memberCount": "1276784400608264264"
+        "memberCount":"1276784400608264264"
     },
     "roles": {
         "manager":"910871355807891466",
-        "head_developer": "1065966980345102346",
-        "linked": "1280516472208363570",
-        "team":"1274693920801947658"
+        "head_developer":"1065966980345102346",
+        "linked":"1280516472208363570",
+        "team":"1274693920801947658",
+        "vip++":"1065972987448266883",
+        "vip+":"1065972998705786950",
+        "vip":"1061155681597653023"
     },
     "logChannels":{
-        "pay": "1283412218041339984"
+        "pay":"1283412218041339984"
     },
     "panel": {
-        "websocket": "wss://panel.clubcolony.in/api/client/servers",
-        "ClientURL": "https://panel.clubcolony.in/api/client",
-        "ApplicationURL": "https://panel.clubcolony.in/api/application",
-        "CLIENTKEY": "ptlc_Iy6Fdj1g9FWyZq37C50zKOKUjKmrXecyyfIYtKrckrF",
-        "APPLICATIONKEY": "ptla_zDs5In67MbY2Y6xxIdYmha9Hs4p1sdoYtfblSpIrk5q",
+        "websocket":"wss://panel.clubcolony.in/api/client/servers",
+        "ClientURL":"https://panel.clubcolony.in/api/client",
+        "ApplicationURL":"https://panel.clubcolony.in/api/application",
+        "CLIENTKEY":"ptlc_Iy6Fdj1g9FWyZq37C50zKOKUjKmrXecyyfIYtKrckrF",
+        "APPLICATIONKEY":"ptla_zDs5In67MbY2Y6xxIdYmha9Hs4p1sdoYtfblSpIrk5q",
         "URL":"https://panel.clubcolony.in"
     },
     "colors":{
         "red":"F60002",
-        "green": "48AF40"
+        "green":"48AF40"
     }
 }
