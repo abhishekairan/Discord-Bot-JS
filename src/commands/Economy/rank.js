@@ -68,18 +68,18 @@ module.exports = {
         ),
 
     async execute(interaction){
-        // // Checking if command is executed by manager or not
-        // if(!interaction.member.roles.cache.has(roles.manager)) {
-        //     const embed = new EmbedBuilder().setTitle("Permission Denied").setDescription("Only Managers are allowed to use this command")
-        //     return interaction.reply({embeds: [embed],ephemeral: true})
-        // }
+        // Checking if command is executed by manager or not
+        if(!interaction.member.roles.cache.has(roles.manager)) {
+            const embed = new EmbedBuilder().setTitle("Permission Denied").setDescription("Only Managers are allowed to use this command")
+            return interaction.reply({embeds: [embed],ephemeral: true})
+        }
 
-        // // Checking if player has linked role or not
+        // Checking if player has linked role or not
         const player = await interaction.guild.members.fetch(interaction.options.getUser('player').id)
-        // if(!player.roles.cache.has(roles.linked)){
-        //     const embed = new EmbedBuilder().setTitle("Player not linked").setDescription(`${player} has not linekd his account yet. Can't perform the transaction`).setColor(colors.red)
-        //     return interaction.reply({embeds: [embed]})
-        // }
+        if(!player.roles.cache.has(roles.linked)){
+            const embed = new EmbedBuilder().setTitle("Player not linked").setDescription(`${player} has not linekd his account yet. Can't perform the transaction`).setColor(colors.red)
+            return interaction.reply({embeds: [embed]})
+        }
 
         const cmd = interaction.options.getSubcommand()
         const {uuid} = await getserverbyname('CCS')
