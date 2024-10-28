@@ -19,7 +19,7 @@ module.exports = {
     async execute(interaction) {
         const storeType = store_select_menu
         const actionRow = new ActionRowBuilder().addComponents(storeType)
-        const shop = interaction.options.getString('shop_type').value()
+        const shop = interaction.options.getString('shop_type')
         let embed = new EmbedBuilder().setTitle("CCS STORE").setDescription("Select the store type from the below select menu")
         switch(shop){
             case "rank":
