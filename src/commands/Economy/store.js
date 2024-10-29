@@ -19,15 +19,16 @@ module.exports = {
     async execute(interaction) {
         const storeType = store_select_menu
         const actionRow = new ActionRowBuilder().addComponents(storeType)
-        const shop = interaction.options.getString('shop_type').value()
-        let embed = new EmbedBuilder().setTitle("CCS STORE").setDescription("Select the store type from the below select menu")
-        switch(shop){
-            case "rank":
-                embed = Embeds.rankStore;
-            case "money":
-                embed = Embeds.moneyStore;
-            case "coin":
-                embed = Embeds.coinStore;
+        const shop = interaction.options.getString('shop_type')
+        let embed
+        if(shop === "rank"){
+            embed = Embeds.rankStore;
+        }else if(shop === "money"){
+            embed = Embeds.moneyStore;
+        }else if(shop === "coin"){
+            embed = Embeds.coinStore;
+        }else{
+            embed = new EmbedBuilder().setTitle("CCS STORE").setDescription("Select the store type from the below select menu")
         }
         await interaction.reply({components: [actionRow],embeds:[embed]});
     }
