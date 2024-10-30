@@ -51,7 +51,7 @@ module.exports = {
             await interaction.deferReply()
             const {uuid} = await getserverbyname("CCS")
             
-            // const logchannel = await interaction.guild.channels.fetch(logChannels.pay) // Channel which will log the transactions
+            const logchannel = await interaction.guild.channels.fetch(logChannels.pay) // Channel which will log the transactions
             const logEmbed = new EmbedBuilder().setTitle("Transaction Log").setAuthor({name:`${interaction.member.displayName}`,iconURL:interaction.member.displayAvatarURL()}).setTimestamp()
             
             const creds = await getSocketCredientials(uuid)
