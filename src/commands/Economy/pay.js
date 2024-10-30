@@ -70,6 +70,14 @@ module.exports= {
             }
         })
 
+        ws.on('player not found',()=>{
+            const embed = new EmbedBuilder()
+                .setTitle("Player Not Found")
+                .setDescription(`Make sure you have linked your account!!!`)
+                .setColor(colors.red)
+            interaction.editReply({embeds: [embed]})
+            ws.close()
+        })
         await pteroconsole(uuid,`bal ${user.nickname}`)
     }
 
