@@ -279,9 +279,9 @@ module.exports = {
             }else if (subcommand==='rank') {
                 let data
                 if(id){
-                    data = await setter.MoneySetter.deleteById(id)
+                    data = await setter.RankSetter.deleteById(id)
                 }else if(user){
-                    data = await setter.MoneySetter.deleteByUserID(user)
+                    data = await setter.RankSetter.deleteByUserID(user)
                 }
                 console.log(data);
                 let embed
