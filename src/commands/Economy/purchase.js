@@ -305,17 +305,33 @@ module.exports = {
             if (id && user){
                 embed.setTitle("Invalid Command!!!").setDescription("You can not select id and user togther").setColor(colors.red);
             }else if(id && type){
-                if(type === 'money'){
+                if(type === 'money' || type==='coin'){
                     data = await getter.MoneyGetter.getByID(id)
                     console.log(data.userID);
                     const user = await interaction.guild.members.fetch(`${data.userID}`)
                     console.log(user.id);
-                    embed.setTitle('Money Purchase Log').addFields(
+                    type === 'money' ? embed.setTitle('Money Purchase Log') : embed.setTitle("Coin Purchase Log");
+                    embed.addFields(
                         {name:'ID' ,value: String(data.id),inline:true},
                         {name: 'Date',value: String(data.dateOfPurchase),inline:true},
                         {name: 'User',value: String(user),inline:false},
                         {name: 'Cost',value: String(data.cost),inline:true},
                         {name: 'Amount',value: String(data.amount),inline:true},
+                        {name: 'Note',value: String(data.note)}
+                    )
+                }
+                if(type === 'rank'){
+                    data = await getter.MoneyGetter.getByID(id)
+                    console.log(data.userID);
+                    const user = await interaction.guild.members.fetch(`${data.userID}`)
+                    console.log(user.id);
+                    embed.setTitle('Rank Purchase Log').addFields(
+                        {name:'ID' ,value: String(data.id),inline:true},
+                        {name: 'Date',value: String(data.dateOfPurchase),inline:true},
+                        {name: 'Name',value: String(data.name),inline:true},
+                        {name: 'User',value: String(user),inline:false},
+                        {name: 'Cost',value: String(data.cost),inline:true},
+                        {name: 'Duration',value: String(data.duration),inline:true},
                         {name: 'Note',value: String(data.note)}
                     )
                 }
