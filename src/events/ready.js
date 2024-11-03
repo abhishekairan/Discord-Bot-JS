@@ -1,5 +1,5 @@
 const { Events } = require('discord.js');
-const { Database, Servers } = require('../database/models')
+const { Database } = require('../database/models')
 const getservers = require('../pterodactyl-api/Application/getservers')
 const getter = require('../database/getter')
 const setters = require('../database/setters')
@@ -11,18 +11,21 @@ module.exports = {
 	async execute(client) {
 		console.log(`Ready! Logged in as ${client.user.tag}`);
 		Database.sync()
-		const response = await getservers()
-		const serverUUID = new Array(response)
-		const servers = await getter.getservers()
-		const exsisitingServers = new Array
-		servers.forEach(server => exsisitingServers.push(server.dataValues.uuid))
-		response.forEach(element => {
-			if(!exsisitingServers.includes(element.attributes.uuid)){
-				setters.addServer(element.attributes.id,
-					element.attributes.uuid,
-					element.attributes.name,
-					element.attributes.identifier)
-			}
-		});
+		try {
+			const response = await getservers()
+			const servers = await getter.getservers()
+			const exsisitingServers = new Array
+			servers.forEach(server => exsisitingServers.push(server.dataValues.uuid))
+			response.forEach(element => {
+				if(!exsisitingServers.includes(element.attributes.uuid)){
+					setters.addServer(element.attributes.id,
+						element.attributes.uuid,
+						element.attributes.name,
+						element.attributes.identifier)
+				}
+			});	
+		} catch (error) {
+			console.log('Some error occure while updating server list');
+		}
 	},
 };

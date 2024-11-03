@@ -7,7 +7,6 @@ const commands = [];
 // Grab all the command folders from the commands directory you created earlier
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
-
 for (const folder of commandFolders) {
 	// Grab all the command files from the commands directory you created earlier
 	const commandsPath = path.join(foldersPath, folder);
@@ -26,6 +25,26 @@ for (const folder of commandFolders) {
 
 // Construct and prepare an instance of the REST module
 const rest = new REST().setToken(process.env.TOKEN);
+
+// Function to delete all global slash command
+async function delete_all_global_command(){
+    try {
+        console.log('Started deleting all global commands...');
+
+        // Fetch all global commands
+        const commands = await rest.get(Routes.applicationCommands(process.env.CLIENTID));
+
+        // Loop through and delete each command
+        for (const command of commands) {
+            await rest.delete(Routes.applicationCommand(process.env.CLIENTID, command.id));
+            console.log(`Deleted global command: ${command.name}`);
+        }
+
+        console.log('Successfully deleted all global commands.');
+    } catch (error) {
+        console.error('Error deleting global commands:', error);
+    }
+};
 
 // and deploy your commands!
 (async () => {

@@ -1,6 +1,20 @@
 const { Database, Servers,Money,Rank,Coin } = require('./models')
 
 
+function getCurrentISTDate() {
+  const today = new Date();
+
+  // Convert to IST using `toLocaleString` with `Asia/Kolkata` timezone
+  const istDate = today.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+
+  // // Extract day, month, and year from the IST date string
+  // const [day, month, year] = istDate.split(',')[0].split('/');  // '24/10/2024'
+
+  // return `${day.padStart(2, '0')}-${month.padStart(2, '0')}-${year}`;
+  return istDate;
+}
+
+
 function getservers() {
   return new Promise((resolve,reject) => {
     try{
@@ -44,6 +58,8 @@ function getserverbyuuid(uuid) {
 }
 
 
+
+
 class MoneyGetter{
   // Function to get money purchase log filtered using userID
   static async getByUserID(userID){
@@ -64,7 +80,7 @@ class MoneyGetter{
     if(ID){
       return new Promise((resolve,reject) => {
         try{
-          const money = Money.findOne({where: {ID: ID}})
+          const money = Money.findOne({where: {id: ID}})
           resolve(money)
         }catch(err){
           console.log(err);
@@ -154,9 +170,9 @@ class RankGetter{
     }
   }
   // Function tog get all Rank purchase log
-  static async getAll(){
+  static async getAll(limit,offset){
     try {
-      const rank = Rank.findAll()
+      const rank = Rank.findAll({limit:limit,offset:offset,order: [['createdAT','DESC']]})
       return rank
     } catch (error) {
       console.log(error);      
@@ -165,12 +181,45 @@ class RankGetter{
   }
 }
 
-(async() => {
-  console.log("Async function executed");
-  console.log( await MoneyGetter.getAll());
-})()
+
+
+class PurchaseLog{
+
+  static async getAll(typeList){
+    let data={}
+    
+    for (const type of typeList) {
+      // console.log(type);
+      if (type === 'rank') {
+          const rankData = await RankGetter.getAll();
+          data['rank'] = rankData; // Push the result into the data array
+      } else if (type === 'money') {
+          const moneyData = await MoneyGetter.getAll();
+          data['money'] = moneyData; // Push the result into the data array
+      } else if (type === 'coin') {
+          const coinData = await CoinGetter.getAll();
+          data['coin'] = coinData; // Push the result into the data array
+      }
+    }
+    // console.log(data.money);
+    return data
+  }
+  
+}
+
+
+
+// (async() => {
+//   console.log("Async function executed");
+//   console.log( await MoneyGetter.getAll());
+// })()
 module.exports = {
   getservers: getservers,
   getserverbyname: getserverbyname,
   getserverbyuuid: getserverbyuuid,
+  getCurrentISTDate: getCurrentISTDate,
+  MoneyGetter: MoneyGetter,
+  CoinGetter: CoinGetter,
+  RankGetter: RankGetter,
+  PurchaseLog
 }

@@ -1,22 +1,8 @@
 const { SlashCommandBuilder, EmbedBuilder, Embed } = require("discord.js");
 const { Websocket, getSocketCredientials } = require("../../pterodactyl-api/Client/WebSocket");
 const pteroconsole = require('../../pterodactyl-api/Client/console')
-const { getserverbyname } = require("../../database/getter");
+const { getserverbyname, getCurrentISTDate } = require("../../database/getter");
 const {colors,roles} = require('../../config.json');
-const { addRank } = require("../../database/setters");
-
-function getCurrentISTDate() {
-    const today = new Date();
-
-    // Convert to IST using `toLocaleString` with `Asia/Kolkata` timezone
-    const istDate = today.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-
-    // Extract day, month, and year from the IST date string
-    const [day, month, year] = istDate.split(',')[0].split('/');  // '24/10/2024'
-
-    return `${day.padStart(2, '0')}-${month.padStart(2, '0')}-${year}`;
-}
-
 
 
 module.exports = {
@@ -94,19 +80,22 @@ module.exports = {
         // [LP] fammy001 now inherits permissions from vip++ (Emperor) for a duration of 1  hour in context global.
         // [LP] A user for fammy0011 could not be found.
         // [LP] fammy001 already temporarily inherits from vip (knight) in context global.
+        // [LP] fammy001 now inherits permissions from vip+ (Warrior) for a duration of 1 week 3 days in context global.
         if(cmd==='add'){
             
             ws.on('luckperm',async (data) => {
+                // console.log(data.message);
                 if(data.message.includes('could not be found.')){
+                    // console.log("Player not found matched");
                     const embed = new EmbedBuilder()
                         .setTitle("Player Not Found")
                         .setDescription(`Make sure you have linked your account!!!`)
                         .setColor(colors.red)
-                    interaction.editReply({embeds: [embed]})
+                    await interaction.editReply({embeds: [embed]})
                     ws.close()
                 }
                 else if(data.message.includes(player.nickname)){
-                    if(data.message.includes(`now inherits permissions from ${rank}`) && data.message.includes(`${duration} day`)){
+                    if(data.message.includes(`now inherits permissions from ${rank}`)){
                         const embed = new EmbedBuilder().setTitle("Rank Added")
                             .setDescription(`Successfully gave ${role} rank to ${player} for ${duration} days`)
                             .setTimestamp()
@@ -114,14 +103,13 @@ module.exports = {
                             try {
                                 await player.roles.add(role)
                             } catch (error) {}
-                        await addRank(rank,duration,getCurrentISTDate(),player.id)
-                        interaction.editReply({embeds:[embed]})
+                        await interaction.editReply({embeds:[embed]})
                     }else if(data.message.includes(`already temporarily inherits from ${rank}`)){
                         const embed = new EmbedBuilder()
                             .setTitle("Cannot add rank")
                             .setDescription(`${player} already has ${role}`)
                             .setColor(colors.red)
-                        interaction.editReply({embeds:[embed]})
+                        await interaction.editReply({embeds:[embed]})
                     }
 
                     ws.close()
@@ -139,7 +127,7 @@ module.exports = {
                         .setTitle("Player Not Found")
                         .setDescription(`Make sure you have linked your account!!!`)
                         .setColor(colors.red)
-                    interaction.editReply({embeds: [embed]})
+                    await interaction.editReply({embeds: [embed]})
                     ws.close()
                 }
                 else if(data.message.includes(player.nickname)){
@@ -151,14 +139,13 @@ module.exports = {
                         try {
                             await player.roles.remove(role)
                         } catch (error) {}
-                        // await addRank(rank,duration,getCurrentISTDate(),player.id)
-                        interaction.editReply({embeds:[embed]})
+                        await interaction.editReply({embeds:[embed]})
                     }else if(data.message.includes(`does not temporarily inherit from ${rank}`)){
                         const embed = new EmbedBuilder()
                             .setTitle("Cannot remove rank")
                             .setDescription(`${player} do not has ${role}`)
                             .setColor(colors.red)
-                        interaction.editReply({embeds:[embed]})
+                        await interaction.editReply({embeds:[embed]})
                     }
 
                     ws.close()
@@ -166,5 +153,11 @@ module.exports = {
             })
             await pteroconsole(uuid,`lp user ${player.nickname} parent removetemp ${rank}`)
         }
+        
+        setTimeout(async () => {
+            try {
+                ws.close()  
+            } catch (error) {}
+        }, 5000);
     }
 }

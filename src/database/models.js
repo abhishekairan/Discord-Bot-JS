@@ -26,7 +26,7 @@ const Money = Database.define('money', {
 		primaryKey: true
 	},
 	userID: {
-		type: DataTypes.INTEGER,
+		type: DataTypes.STRING,
 		allowNull: false
 	},
 	cost: {
@@ -38,8 +38,9 @@ const Money = Database.define('money', {
 		allowNull: false,
 	},
 	dateOfPurchase: {
-		type: DataTypes.DATE,
-		allowNull: false
+		type: DataTypes.DATEONLY,
+		allowNull: false,
+		defaultValue: DataTypes.NOW
 	},
 	note:{
 		type: DataTypes.STRING,
@@ -67,8 +68,9 @@ const Coin = Database.define('coin', {
 		allowNull: false,
 	},
 	dateOfPurchase: {
-		type: DataTypes.DATE,
-		allowNull: false
+		type: DataTypes.DATEONLY,
+		allowNull: false,
+		defaultValue: DataTypes.NOW
 	},
 	note:{
 		type: DataTypes.STRING,
@@ -91,8 +93,9 @@ const Rank = Database.define('rank',{
 		allowNull: false
 	},
 	dateOfPurchase:{
-		type: DataTypes.DATE,
-		allowNull: false
+		type: DataTypes.DATEONLY,
+		allowNull: false,
+		defaultValue: DataTypes.NOW
 	},
 	userID: {
 		type: DataTypes.INTEGER,
