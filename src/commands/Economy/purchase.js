@@ -286,7 +286,7 @@ module.exports = {
                 console.log(data);
                 let embed
                 if(data.success){
-                    embed = new EmbedBuilder().setTitle("Deleted Money Purchase log").setDescription(data.message).setColor(colors.green).setTimestamp()
+                    embed = new EmbedBuilder().setTitle("Deleted Rank Purchase log").setDescription(data.message).setColor(colors.green).setTimestamp()
                 }else{
                     embed = new EmbedBuilder().setTitle("Failed To Delete Purchase Log").setDescription(data.message).setColor(colors.red).setTimestamp()
                 }
