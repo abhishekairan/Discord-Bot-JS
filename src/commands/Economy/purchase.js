@@ -321,7 +321,7 @@ module.exports = {
                     )
                 }
                 if(type === 'rank'){
-                    data = await getter.MoneyGetter.getByID(id)
+                    data = await getter.RankGetter.getByID(id)
                     console.log(data.userID);
                     const user = await interaction.guild.members.fetch(`${data.userID}`)
                     console.log(user.id);
