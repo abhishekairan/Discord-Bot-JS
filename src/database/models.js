@@ -56,7 +56,7 @@ const Coin = Database.define('coin', {
 		primaryKey: true
 	},
 	userID: {
-		type: DataTypes.INTEGER,
+		type: DataTypes.STRING,
 		allowNull: false
 	},
 	cost: {
@@ -98,7 +98,7 @@ const Rank = Database.define('rank',{
 		defaultValue: DataTypes.NOW
 	},
 	userID: {
-		type: DataTypes.INTEGER,
+		type: DataTypes.STRING,
 		allowNull: false
 	},
 	cost: {
