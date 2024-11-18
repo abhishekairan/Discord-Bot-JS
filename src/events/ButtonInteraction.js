@@ -22,7 +22,7 @@ module.exports = {
                 }
             case "serverStartBTN":
                 if(interaction.member.roles.cache.has(roles.manager) || interaction.member.roles.cache.has(roles.head_developer)){
-                    const uuid = interaction.message.embeds[0].fields[2].value
+                    const uuid = interaction.message.embeds[0].fields[2]
                     power.start(uuid)
                     await interaction.reply({content:"Server is starting...",ephemeral:true})
                 }else {
@@ -30,7 +30,7 @@ module.exports = {
                 }
             case "serverRestartBTN":
                 if(interaction.member.roles.cache.has(roles.manager) || interaction.member.roles.cache.has(roles.head_developer)){
-                    const uuid = interaction.message.embeds[0].fields[2].value
+                    const uuid = interaction.message.embeds[0].fields[2]
                     power.restart(uuid)
                     await interaction.reply({content:"Server is restarting...",ephemeral:true})
                 }else {
@@ -39,7 +39,7 @@ module.exports = {
                 
             case "serverStopBTN":
                 if(interaction.member.roles.cache.has(roles.manager) || interaction.member.roles.cache.has(roles.head_developer)){
-                    const uuid = interaction.message.embeds[0].fields[2].value
+                    const uuid = interaction.message.embeds[0].fields[2]
                     console.log(uuid);
                     power.stop(uuid)
                     await interaction.reply({content:"Server is stoping...",ephemeral:true})
@@ -49,7 +49,7 @@ module.exports = {
                 
             case "serverKillBTN":
                 if(interaction.member.roles.cache.has(roles.manager) || interaction.member.roles.cache.has(roles.head_developer)){
-                    const uuid = interaction.message.embeds[0].fields[2].value
+                    const uuid = interaction.message.embeds[0].fields[2]
                     console.log(uuid);
                     power.kill(uuid)
                     await interaction.reply({content:"Server is killed",ephemeral:true})
