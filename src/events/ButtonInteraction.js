@@ -1,4 +1,4 @@
-const { Events } = require('discord.js')
+const { Events, BurstHandlerMajorIdKey } = require('discord.js')
 const ModelBuilder = require('../utils/componenets/models')
 const { roles } = require('../config.json')
 const power = require('../pterodactyl-api/Client/power')
@@ -20,6 +20,7 @@ module.exports = {
                 }else {
                     await interaction.reply({content:`You can't answer to questions`,ephemeral: true})
                 }
+                break;
             case "serverStartBTN":
                 if(interaction.member.roles.cache.has(roles.manager) || interaction.member.roles.cache.has(roles.head_developer)){
                     const uuid = interaction.message.embeds[0].fields[2]
@@ -28,6 +29,7 @@ module.exports = {
                 }else {
                     await interaction.reply({content:`You can't answer to questions`,ephemeral: true})
                 }
+                break;
             case "serverRestartBTN":
                 if(interaction.member.roles.cache.has(roles.manager) || interaction.member.roles.cache.has(roles.head_developer)){
                     const uuid = interaction.message.embeds[0].fields[2]
@@ -36,7 +38,7 @@ module.exports = {
                 }else {
                     await interaction.reply({content:`You can't answer to questions`,ephemeral: true})
                 }
-                
+                break
             case "serverStopBTN":
                 if(interaction.member.roles.cache.has(roles.manager) || interaction.member.roles.cache.has(roles.head_developer)){
                     const uuid = interaction.message.embeds[0].fields[2]
@@ -46,7 +48,7 @@ module.exports = {
                 }else {
                     await interaction.reply({content:`You can't answer to questions`,ephemeral: true})
                 }
-                
+                break
             case "serverKillBTN":
                 if(interaction.member.roles.cache.has(roles.manager) || interaction.member.roles.cache.has(roles.head_developer)){
                     const uuid = interaction.message.embeds[0].fields[2]
@@ -56,6 +58,7 @@ module.exports = {
                 }else {
                     await interaction.reply({content:`You can't answer to questions`,ephemeral: true})
                 }
+                break
         }
     }
 }
