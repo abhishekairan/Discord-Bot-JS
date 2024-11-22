@@ -1,4 +1,4 @@
-const { Sequelize , DataTypes} = require('sequelize')
+import { Sequelize , DataTypes} from 'sequelize'
 
 
 const Database = new Sequelize('database', 'username', 'password', {

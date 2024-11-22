@@ -1,6 +1,6 @@
-const { SlashCommandBuilder , EmbedBuilder , ActionRowBuilder } = require('discord.js')
-const {questionButton} = require('../../utils/componenets/buttons')
-const { Channels } = require("../../config.json")
+import { SlashCommandBuilder , EmbedBuilder , ActionRowBuilder } from 'discord.js';
+import {questionButton} from '../../utils/componenets/buttons';
+import { Channels } from "../../config.json";
 
 module.exports = {
     data: new SlashCommandBuilder().setName('question').setDescription('Ask a question about server').addStringOption(option => 

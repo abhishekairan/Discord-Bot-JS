@@ -1,8 +1,9 @@
-const { Client , GatewayIntentBits , Collection } = require('discord.js');
-const fs = require('node:fs');
-const path = require('node:path');
-const { getservers } = require('./database/getter');
-require('dotenv').config();
+import { Client , GatewayIntentBits , Collection } from 'discord.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import 'dotenv/config';
+import command from filePath;
+import event from filePath;
 
 const client = new Client({intents: [
     GatewayIntentBits.Guilds,
@@ -22,7 +23,6 @@ for (const folder of commandFolders) {
 	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 	for (const file of commandFiles) {
 		const filePath = path.join(commandsPath, file);
-		const command = require(filePath);
 		// console.log(command)
 		if ('data' in command && 'execute' in command) {
 			client.commands.set(command.data.name, command);
@@ -36,7 +36,6 @@ const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'
 
 for (const file of eventFiles) {
 	const filePath = path.join(eventsPath, file);
-	const event = require(filePath);
 	if (event.once) {
 		client.once(event.name, (...args) => event.execute(...args));
 	} else {

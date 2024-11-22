@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, SlashCommandStringOption, SlashCommandBooleanOption, EmbedBuilder } = require('discord.js')
-const McServer = require('../../utils/APICalls/minecraft')
+import { SlashCommandBuilder, SlashCommandStringOption, SlashCommandBooleanOption, EmbedBuilder } from 'discord.js';
+import McServer from '../../utils/APICalls/minecraft';
 
 module.exports = {
 

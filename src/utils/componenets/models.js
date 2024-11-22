@@ -1,4 +1,4 @@
-const { ModalBuilder , ActionRowBuilder , TextInputBuilder , TextInputStyle } = require('discord.js')
+import { ModalBuilder , ActionRowBuilder , TextInputBuilder , TextInputStyle } from 'discord.js';
 
 
 function modal_single_field(field_label ,title, customId){

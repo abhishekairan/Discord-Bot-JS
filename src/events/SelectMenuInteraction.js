@@ -1,5 +1,5 @@
-const { Events } = require("discord.js");
-const Embeds = require('../utils/componenets/embeds')
+import { Events } from "discord.js";
+import Embeds from '../utils/componenets/embeds';
 
 
 module.exports = {

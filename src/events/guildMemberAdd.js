@@ -1,5 +1,5 @@
-const { Events } = require('discord.js')
-const { Channels } = require('../config.json')
+import { Events } from 'discord.js';
+import { Channels } from '../config.json';
 
 module.exports = {
     name: "guildMemberAdd",

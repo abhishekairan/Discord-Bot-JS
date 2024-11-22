@@ -1,6 +1,6 @@
-const { SlashCommandBuilder, ActionRowBuilder, EmbedBuilder } = require('discord.js')
-const { store_select_menu } = require('../../utils/componenets/selectMenus')
-const Embeds = require('../../utils/componenets/embeds')
+import { SlashCommandBuilder, ActionRowBuilder, EmbedBuilder } from 'discord.js';
+import { store_select_menu } from '../../utils/componenets/selectMenus';
+import Embeds from '../../utils/componenets/embeds';
 
 module.exports = {
     data: new SlashCommandBuilder()

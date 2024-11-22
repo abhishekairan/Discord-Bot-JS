@@ -1,8 +1,8 @@
-const { Events } = require('discord.js');
-const { Database } = require('../database/models')
-const getservers = require('../pterodactyl-api/Application/getservers')
-const getter = require('../database/getter')
-const setters = require('../database/setters')
+import { Events } from 'discord.js';
+import { Database } from '../database/models';
+import getservers from '../pterodactyl-api/Application/getservers';
+import getter from '../database/getter';
+import setters from '../database/setters';
 
 
 module.exports = {

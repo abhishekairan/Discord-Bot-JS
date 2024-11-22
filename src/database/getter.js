@@ -1,4 +1,4 @@
-const { Database, Servers,Money,Rank,Coin } = require('./models')
+import { Database, Servers,Money,Rank,Coin } from './models'
 
 
 function getCurrentISTDate() {

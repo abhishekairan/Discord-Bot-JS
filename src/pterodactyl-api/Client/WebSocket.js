@@ -1,5 +1,5 @@
-const WebSocket = require('ws')
-const { panel } = require('../../config.json');
+import WebSocket from 'ws';
+import { panel } from '../../config.json';
 
 
 

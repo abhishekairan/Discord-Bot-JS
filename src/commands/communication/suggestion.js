@@ -1,5 +1,5 @@
-const { SlashCommandBuilder , EmbedBuilder } = require("discord.js")
-const { Channels } = require("../../config.json")
+import { SlashCommandBuilder , EmbedBuilder } from "discord.js";
+import { Channels } from "../../config.json";
 
 module.exports = {
     data: new SlashCommandBuilder().setName("suggestion").setDescription("Suggest something to the server").addStringOption(option => 

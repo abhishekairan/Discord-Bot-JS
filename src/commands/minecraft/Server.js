@@ -1,12 +1,12 @@
-require('dotenv').config();
-const WebSocket = require('ws')
-const { panel,roles } = require('../../config.json');
-const getter = require('../../database/getter');
-const power = require('../../pterodactyl-api/Client/power');
-const pteroconsole = require('../../pterodactyl-api/Client/console')
-const getservers = require('../../pterodactyl-api/Application/getservers');
-const {serverStartButton,serverRestartButton,serverStopButton,serverKillButton} = require("../../utils/componenets/buttons");
-const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder } = require('discord.js');
+import 'dotenv/config';
+import WebSocket from 'ws';
+import { panel,roles } from '../../config.json';
+import getter from '../../database/getter';
+import power from '../../pterodactyl-api/Client/power';
+import pteroconsole from '../../pterodactyl-api/Client/console';
+import getservers from '../../pterodactyl-api/Application/getservers';
+import {serverStartButton,serverRestartButton,serverStopButton,serverKillButton} from "../../utils/componenets/buttons";
+import { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder } from 'discord.js';
 
 
 module.exports = {

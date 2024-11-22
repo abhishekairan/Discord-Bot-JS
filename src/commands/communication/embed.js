@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const {roles} = require('../../config.json')
+import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
+import {roles} from '../../config.json';
 
 module.exports= {
     data: new SlashCommandBuilder()

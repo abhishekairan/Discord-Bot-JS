@@ -1,4 +1,4 @@
-const { Channels } = require('../config.json')
+import { Channels } from '../config.json';
 
 module.exports = {
     name: "guildMemberRemove",

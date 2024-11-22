@@ -1,4 +1,4 @@
-const https = require('https')
+import https from 'https';
 
 module.exports = async (ip,bedrock) => {
 

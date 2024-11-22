@@ -1,6 +1,5 @@
-const axios = require('axios')
-const { panel } = require('../../config.json')
-
+import axios from 'axios';
+import { panel } from '../../config.json';
 
 const ClientKey = panel.CLIENTKEY
 const ClientURL = panel.ClientURL

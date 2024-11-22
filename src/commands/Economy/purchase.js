@@ -1,7 +1,7 @@
-const { SlashCommandBuilder, EmbedBuilder, Embed } = require("discord.js");
-const getter = require("../../database/getter");
-const setter = require("../../database/setters");
-const {colors,roles} = require('../../config.json')
+import { SlashCommandBuilder, EmbedBuilder, Embed } from "discord.js";
+import getter from "../../database/getter";
+import setter from "../../database/setters";
+import {colors,roles} from '../../config.json';
 
 
 // Helper function to format data into a table

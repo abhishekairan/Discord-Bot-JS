@@ -1,4 +1,4 @@
-const { ButtonBuilder, ButtonStyle } = require("discord.js");
+import { ButtonBuilder, ButtonStyle } from "discord.js";
 
 const questionButton = new ButtonBuilder()
     .setLabel('Answer')

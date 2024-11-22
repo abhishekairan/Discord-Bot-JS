@@ -1,8 +1,8 @@
-const { SlashCommandBuilder, EmbedBuilder, Embed } = require("discord.js");
-const { Websocket, getSocketCredientials } = require("../../pterodactyl-api/Client/WebSocket");
-const pteroconsole = require('../../pterodactyl-api/Client/console')
-const { getserverbyname, getCurrentISTDate } = require("../../database/getter");
-const {colors,roles} = require('../../config.json');
+import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
+import { Websocket, getSocketCredientials } from "../../pterodactyl-api/Client/WebSocket";
+import pteroconsole from '../../pterodactyl-api/Client/console';
+import { getserverbyname } from "../../database/getter";
+import {colors,roles} from '../../config.json';
 
 
 module.exports = {

@@ -1,7 +1,7 @@
-const { Events, BurstHandlerMajorIdKey } = require('discord.js')
-const ModelBuilder = require('../utils/componenets/models')
-const { roles } = require('../config.json')
-const power = require('../pterodactyl-api/Client/power')
+import { Events, BurstHandlerMajorIdKey } from 'discord.js';
+import ModelBuilder from '../utils/componenets/models';
+import { roles } from '../config.json';
+import power from '../pterodactyl-api/Client/power';
 
 module.exports = {
     name: Events.InteractionCreate,

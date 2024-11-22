@@ -1,4 +1,4 @@
-const {Money,Rank,Coin,Servers} = require('./models')
+import {Money,Rank,Coin,Servers} from './models';
 
 
 function addServer(id,uuid,name,identifier) {
