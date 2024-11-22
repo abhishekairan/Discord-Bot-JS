@@ -20,8 +20,8 @@
         "websocket":"wss://panel.clubcolony.in/api/client/servers",
         "ClientURL":"https://panel.clubcolony.in/api/client",
         "ApplicationURL":"https://panel.clubcolony.in/api/application",
-        "CLIENTKEY":"ptlc_Iy6Fdj1g9FWyZq37C50zKOKUjKmrXecyyfIYtKrckrF",
-        "APPLICATIONKEY":"ptla_zDs5In67MbY2Y6xxIdYmha9Hs4p1sdoYtfblSpIrk5q",
+        "CLIENTKEY":"ptlc_WhVt1Ol0dM9JofVC8qn1AS2u9aXPVGZZQpQwfbTHWr1",
+        "APPLICATIONKEY":"ptla_HzgGxrAkjILRG5MAaUbvVrnNeD5jbUT7KDqS6lQwA3k",
         "URL":"https://panel.clubcolony.in"
     },
     "colors":{
