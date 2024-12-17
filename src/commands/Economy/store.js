@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, ActionRowBuilder, EmbedBuilder } from 'discord.js';
-import store_select_menu from '../../utils/componenets/selectMenus.js';
+import {store_select_menu} from '../../utils/componenets/selectMenus.js';
 import Embeds from '../../utils/componenets/embeds.js';
 
 export default {
@@ -17,7 +17,7 @@ export default {
         ),
         
     async execute(interaction) {
-        console.log(store_select_menu);
+        // console.log(store_select_menu);
         const storeType = store_select_menu
         const actionRow = new ActionRowBuilder().addComponents(storeType)
         const shop = interaction.options.getString('shop_type')

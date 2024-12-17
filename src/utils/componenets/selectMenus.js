@@ -3,7 +3,7 @@ import { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilde
 
 
 // Select menu for shop 
-const store_select_menu = new StringSelectMenuBuilder()
+export const store_select_menu = new StringSelectMenuBuilder()
 .setCustomId("store_select_menu")
 .setPlaceholder("Which Store do you wanna see?")
 .addOptions(
@@ -13,4 +13,4 @@ const store_select_menu = new StringSelectMenuBuilder()
 )
 
 
-export default {store_select_menu }
+export default {store_select_menu}
