@@ -112,4 +112,6 @@ export const Rank = Database.define('rank',{
 	
 })
 
+Database.sync()
+
 export default {Database,Servers,Money,Rank,Coin}
