@@ -17,6 +17,7 @@ export default {
         ),
         
     async execute(interaction) {
+        console.log(store_select_menu);
         const storeType = store_select_menu
         const actionRow = new ActionRowBuilder().addComponents(storeType)
         const shop = interaction.options.getString('shop_type')

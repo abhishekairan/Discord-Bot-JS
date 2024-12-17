@@ -10,59 +10,67 @@ import {serverStartButton,serverRestartButton,serverStopButton,serverKillButton}
 import { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder } from 'discord.js';
 
 const server = await getter.getservers()
-console.log(server);
+// console.log(server);
+const serverName = server.map((e)=> {
+    return {name: e.name,value: e.uuid}
+})
+// console.log(serverName);
+
+const data = new SlashCommandBuilder()
+.setName("server")
+.setDescription("Server name")
+.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+// sub command for power action on servers
+.addSubcommand(subcommand => subcommand
+    .setName('power')
+    .setDescription('Action you want to perform on server')
+    .addStringOption(option => option
+        .setName('servername')
+        .setDescription("Server name which you want to start")
+        .setRequired(true)
+        .addChoices(serverName)
+    )
+    .addStringOption(option => option
+        .setName('action')
+        .setDescription('Action you want to perform')
+        .addChoices(
+            {name: 'Start', value: 'start'},
+            {name: 'Restart', value: 'restart'},
+            {name: 'Stop', value: 'stop'},
+            {name: 'Kill', value: 'kill'}
+        )
+        .setRequired(true)
+    )
+)
+// Subcommand for executing commands on server
+.addSubcommand(subcommand => subcommand
+    .setName("command")
+    .setDescription("Execute a command to server")
+    .addStringOption(option => option
+        .setName('servername')
+        .setDescription("Server name which you want to start")
+        .setRequired(true)
+    )
+    .addStringOption(option => option
+        .setName('command')
+        .setDescription("Command you want to exectue")
+        .setRequired(true)
+    )
+)
+// Subcommand for server informations
+.addSubcommand(subcommand => subcommand
+    .setName("info")
+    .setDescription("Information about the server")
+    .addStringOption(option => option
+        .setName("servername")
+        .setDescription("Name of the server you want to see")
+        .setRequired(true)
+    )
+)
+// console.log(...data.options);
 
 export default {
-    data: new SlashCommandBuilder()
-    .setName("server")
-    .setDescription("Server name")
-    .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
-    // sub command for power action on servers
-    .addSubcommand(subcommand => subcommand
-        .setName('power')
-        .setDescription('Action you want to perform on server')
-        .addStringOption(option => option
-            .setName('servername')
-            .setDescription("Server name which you want to start")
-            .setRequired(true)
-        )
-        .addStringOption(option => option
-            .setName('action')
-            .setDescription('Action you want to perform')
-            .addChoices(
-                {name: 'Start', value: 'start'},
-                {name: 'Restart', value: 'restart'},
-                {name: 'Stop', value: 'stop'},
-                {name: 'Kill', value: 'kill'}
-            )
-            .setRequired(true)
-        )
-    )
-    // Subcommand for executing commands on server
-    .addSubcommand(subcommand => subcommand
-        .setName("command")
-        .setDescription("Execute a command to server")
-        .addStringOption(option => option
-            .setName('servername')
-            .setDescription("Server name which you want to start")
-            .setRequired(true)
-        )
-        .addStringOption(option => option
-            .setName('command')
-            .setDescription("Command you want to exectue")
-            .setRequired(true)
-        )
-    )
-    // Subcommand for server informations
-    .addSubcommand(subcommand => subcommand
-        .setName("info")
-        .setDescription("Information about the server")
-        .addStringOption(option => option
-            .setName("servername")
-            .setDescription("Name of the server you want to see")
-            .setRequired(true)
-        )
-    ),
+    data: data,
     async execute(interaction){
         if(!interaction.member.roles.cache.has(roles.manager)) {
             const embed = new EmbedBuilder().setTitle("Permission Denied").setDescription("Only Managers are allowed to use this command")

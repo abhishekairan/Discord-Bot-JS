@@ -2,7 +2,14 @@ import { REST, Routes } from 'discord.js';
 import 'dotenv/config';
 import fs from 'node:fs';
 import path from 'node:path';
-import command from filePath;
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+
+// Define __filename and __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 
 const commands = [];
 // Grab all the command folders from the commands directory you created earlier
@@ -15,8 +22,10 @@ for (const folder of commandFolders) {
 	// Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
 	for (const file of commandFiles) {
 		const filePath = path.join(commandsPath, file);
-		if ('data' in command && 'execute' in command) {
-			commands.push(command.data.toJSON());
+		const fileUrl = `file://${filePath.replace(/\\/g, '/')}`; // Convert to valid file URL
+		const command = await import(fileUrl); // Use file URL for dynamic import
+		if ('data' in command.default && 'execute' in command.default) {
+			commands.push(command.default.data.toJSON());
 		} else {
 			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 		}

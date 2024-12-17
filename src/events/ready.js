@@ -1,8 +1,8 @@
 import { Events } from 'discord.js';
-import { Database } from '../database/models';
+import { Database } from '../database/models,js';
 import getservers from '../pterodactyl-api/Application/getservers';
 import getter from '../database/getter.js';
-import setters from '../database/setters';
+import setters from '../database/setters.js';
 
 
 export default {
@@ -11,6 +11,7 @@ export default {
 	async execute(client) {
 		console.log(`Ready! Logged in as ${client.user.tag}`);
 		Database.sync()
+		console.log(`database is synced`);
 		try {
 			const response = await getservers()
 			const servers = await getter.getservers()
@@ -22,6 +23,9 @@ export default {
 						element.attributes.uuid,
 						element.attributes.name,
 						element.attributes.identifier)
+					console.log(`added new server ${element.attributes.name}`);
+				}else{
+					console.log(`server ${element.attributes.name} already exists`);
 				}
 			});	
 		} catch (error) {
