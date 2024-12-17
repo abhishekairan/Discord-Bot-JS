@@ -1,8 +1,8 @@
 import { SlashCommandBuilder, ActionRowBuilder, EmbedBuilder } from 'discord.js';
-import { store_select_menu } from '../../utils/componenets/selectMenus';
-import Embeds from '../../utils/componenets/embeds';
+import store_select_menu from '../../utils/componenets/selectMenus.js';
+import Embeds from '../../utils/componenets/embeds.js';
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName("store")
         .setDescription("Click to view store")

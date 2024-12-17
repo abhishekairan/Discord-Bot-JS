@@ -1,6 +1,6 @@
-import { Channels } from '../config.json';
+import { Channels } from '../config.json' assert { type: 'json' };
 
-module.exports = {
+export default {
     name: "guildMemberRemove",
     once: false,
     async execute(member){

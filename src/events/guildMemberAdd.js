@@ -1,7 +1,8 @@
 import { Events } from 'discord.js';
-import { Channels } from '../config.json';
+import configs from '../config.json' assert { type: 'json' };
+const { Channels } = configs
 
-module.exports = {
+export default {
     name: "guildMemberAdd",
     once: false,
     async execute(member){

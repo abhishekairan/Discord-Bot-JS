@@ -1,8 +1,9 @@
 import { SlashCommandBuilder , EmbedBuilder , ActionRowBuilder } from 'discord.js';
-import {questionButton} from '../../utils/componenets/buttons';
-import { Channels } from "../../config.json";
+import {questionButton} from '../../utils/componenets/buttons.js';
+import configs from "../../config.json" assert { type: 'json' };
+const { Channels } = configs;
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder().setName('question').setDescription('Ask a question about server').addStringOption(option => 
         option.setName('question').setDescription('Your question???').setRequired(true)
     ),

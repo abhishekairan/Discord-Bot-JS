@@ -1,10 +1,11 @@
 import axios from 'axios';
-import {panel} from '../../config.json';
+import configs from '../../config.json' assert { type: 'json' };
+const {panel} = configs
 
 const ClientKey = panel.CLIENTKEY
 const ClientURL = panel.ClientURL
 
-module.exports = async (uuid) =>{
+export default async (uuid) =>{
     try{
         const response = await axios.get(`${ClientURL}/servers/${uuid}`, {
             headers: {

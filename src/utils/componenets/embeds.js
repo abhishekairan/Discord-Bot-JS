@@ -2,21 +2,21 @@ import { EmbedBuilder } from "discord.js";
 
 
 // Emebd for money
-const moneyStore = new EmbedBuilder()
+export const moneyStore = new EmbedBuilder()
     .setTitle("Money Store")
     .setDescription("Run out of money? or want to stay high at leaderboard? You can buy in-gamem money from real money, it also help us running the server 😄")
     .addFields({name:"Price",value:"> 10₹: 20k 💵\n> 20₹: 50k 💵\n> 50₹: 200k 💵\n> 100₹: 500k 💵"})
 
 
 // Emebd for coins
-const coinStore = new EmbedBuilder()
+export const coinStore = new EmbedBuilder()
     .setTitle("Coin Store")
     .setDescription("Run out of coin? or want to stay high at leaderboard? You can buy Club Coins from real money, it also help us running the server 😄")
     .addFields({name:"Price",value:"> 10₹: 250 🪙\n> 20₹: 500 🪙\n> 50₹: 1.2k 🪙\n> 100₹: 3k 🪙"})
 
 
 // Embed for ranks
-const rankStore = new EmbedBuilder()
+export const rankStore = new EmbedBuilder()
     .setTitle("Rank Store")
     .setDescription("Enough of the restrictions? Tried of cooldown and non-access to command?? Want to standout from the crowd??? We got you!!! Checkout the ranks and permission which comes along.")
     .addFields([
@@ -28,4 +28,4 @@ const rankStore = new EmbedBuilder()
     // .setImage('https://cdn.discordapp.com/attachments/933705643959910420/1295355783302615114/image.png?ex=670e5995&is=670d0815&hm=330d006b33f8d196639171c06021dabb8c41b0b7ea3237ff2612e850fcf4f041&')
 
 
-module.exports = {moneyStore, coinStore, rankStore}
+export default {moneyStore, coinStore, rankStore}

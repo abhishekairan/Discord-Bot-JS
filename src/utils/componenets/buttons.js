@@ -1,28 +1,28 @@
 import { ButtonBuilder, ButtonStyle } from "discord.js";
 
-const questionButton = new ButtonBuilder()
+export const questionButton = new ButtonBuilder()
     .setLabel('Answer')
     .setStyle(ButtonStyle.Secondary)
     .setCustomId('ansBTN')
 
-const serverStartButton = new ButtonBuilder()
+export const serverStartButton = new ButtonBuilder()
     .setLabel('Start')
     .setStyle(ButtonStyle.Success)
     .setCustomId('serverStartBTN')
 
-const serverRestartButton = new ButtonBuilder()
+export const serverRestartButton = new ButtonBuilder()
     .setLabel('Restart')
     .setStyle(ButtonStyle.Secondary)
     .setCustomId('serverRestartBTN')
 
-const serverStopButton = new ButtonBuilder()
+export const serverStopButton = new ButtonBuilder()
     .setLabel('Stop')
     .setStyle(ButtonStyle.Primary)
     .setCustomId('serverStopBTN')
 
-const serverKillButton = new ButtonBuilder()
+export const serverKillButton = new ButtonBuilder()
     .setLabel('Kill')
     .setStyle(ButtonStyle.Danger)
     .setCustomId('serverKillBTN')
 
-module.exports = {questionButton,serverStartButton,serverRestartButton,serverStopButton,serverKillButton}
+export default {questionButton,serverStartButton,serverRestartButton,serverStopButton,serverKillButton}

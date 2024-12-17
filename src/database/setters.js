@@ -1,7 +1,7 @@
-import {Money,Rank,Coin,Servers} from './models';
+import {Money,Rank,Coin,Servers} from './models.js';
 
 
-function addServer(id,uuid,name,identifier) {
+export function addServer(id,uuid,name,identifier) {
     Servers.create({
         id: id,
         uuid: uuid,
@@ -10,7 +10,7 @@ function addServer(id,uuid,name,identifier) {
     })
 }
 
-class MoneySetter{
+export class MoneySetter{
     // Function to add new money purchase log
     static async addNew(data){
         if(data.dateOfPurchase){
@@ -71,7 +71,7 @@ class MoneySetter{
 
 
 // Class for handling Coin Setters
-class CoinSetter{
+export class CoinSetter{
     // Function to add new Coin purchase log
     static async addNew(data){
         // data => {userID, cost, amount, dateOfPurchase, note}
@@ -133,7 +133,7 @@ class CoinSetter{
 
 
 // Class for handling Rank Setters
-class RankSetter{
+export class RankSetter{
 
     // Function to add new Rank purchase log
     static async addNew(data){
@@ -194,7 +194,7 @@ class RankSetter{
     }
 }
 
-module.exports = { 
+export default { 
     addServer, 
     MoneySetter,
     CoinSetter,

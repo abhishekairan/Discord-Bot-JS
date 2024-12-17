@@ -1,7 +1,8 @@
 import { SlashCommandBuilder, EmbedBuilder, Embed } from "discord.js";
-import getter from "../../database/getter";
-import setter from "../../database/setters";
-import {colors,roles} from '../../config.json';
+import getter from "../../database/getter.js";
+import setter from "../../database/setters.js";
+import configs from '../../config.json' assert { type: 'json' };
+const {colors,roles} = configs
 
 
 // Helper function to format data into a table
@@ -57,7 +58,7 @@ function formatDataTable(data, type,user=true) {
 };
 
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('purchase')
         .setDescription("Add/Remove/Edit purchase log")

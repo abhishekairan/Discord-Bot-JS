@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { panel } from '../../config.json';
+import configs from '../../config.json' assert { type: 'json' };
+const { panel } = configs
 
 const ClientKey = panel.CLIENTKEY
 const ClientURL = panel.ClientURL
@@ -24,7 +25,7 @@ async function sendCommandToPterodactyl(serverId, command) {
 
 
 
-module.exports = async (serverId, command) => {
+export default async (serverId, command) => {
     const response = await sendCommandToPterodactyl(serverId, command)
     return response
 }

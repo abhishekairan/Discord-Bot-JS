@@ -1,13 +1,14 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
-import { Websocket,getSocketCredientials } from '../../pterodactyl-api/Client/WebSocket';
-import  { getserverbyname } from '../../database/getter';
-import pteroconsole from '../../pterodactyl-api/Client/console';
-import { logChannels, roles, colors } from '../../config.json';
+import { Websocket,getSocketCredientials } from '../../pterodactyl-api/Client/WebSocket.js';
+import  { getserverbyname } from '../../database/getter.js';
+import pteroconsole from '../../pterodactyl-api/Client/console.js';
+import configs from '../../config.json' assert { type: 'json' };
+const { logChannels, roles, colors } = configs
 
 
 
 
-module.exports= {
+export default {
     data: new SlashCommandBuilder()
         .setName('pay')
         .setDescription("Pay the user in-game money through discord")

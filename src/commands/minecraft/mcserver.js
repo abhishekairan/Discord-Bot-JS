@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, SlashCommandStringOption, SlashCommandBooleanOption, EmbedBuilder } from 'discord.js';
-import McServer from '../../utils/APICalls/minecraft';
+import McServer from '../../utils/APICalls/minecraft.js';
 
-module.exports = {
+export default {
 
     data: new SlashCommandBuilder()
     .setName("mcserver")

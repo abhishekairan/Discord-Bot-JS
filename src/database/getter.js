@@ -1,7 +1,7 @@
-import { Database, Servers,Money,Rank,Coin } from './models'
+import { Database, Servers,Money,Rank,Coin } from './models.js'
 
 
-function getCurrentISTDate() {
+export function getCurrentISTDate() {
   const today = new Date();
 
   // Convert to IST using `toLocaleString` with `Asia/Kolkata` timezone
@@ -15,7 +15,7 @@ function getCurrentISTDate() {
 }
 
 
-function getservers() {
+export function getservers() {
   return new Promise((resolve,reject) => {
     try{
       const servers = Servers.findAll()
@@ -26,7 +26,7 @@ function getservers() {
   })
 }
 
-function getserverbyname(name) {
+export function getserverbyname(name) {
   return new Promise((resolve,reject) => {
     try{
       const server = Servers.findOne({ where: { name: name } })
@@ -41,7 +41,7 @@ function getserverbyname(name) {
   })
 }
 
-function getserverbyuuid(uuid) {
+export function getserverbyuuid(uuid) {
   return new Promise((resolve,reject) => {
     try{
       if (uuid) {
@@ -60,7 +60,7 @@ function getserverbyuuid(uuid) {
 
 
 
-class MoneyGetter{
+export class MoneyGetter{
   // Function to get money purchase log filtered using userID
   static async getByUserID(userID){
     if(userID){
@@ -103,7 +103,7 @@ class MoneyGetter{
   }
 }
 
-class CoinGetter{
+export class CoinGetter{
   // Function to get Coin purchase log filtered using userID
   static async getByUserID(userID){
     if(userID){
@@ -146,7 +146,7 @@ class CoinGetter{
   }
 }
 
-class RankGetter{
+export class RankGetter{
   // Function tog get Rank purchase log filtered using userID
   static async getByUserID(userID){
     return new Promise((resolve,reject) => {
@@ -183,7 +183,7 @@ class RankGetter{
 
 
 
-class PurchaseLog{
+export class PurchaseLog{
 
   static async getAll(typeList){
     let data={}
@@ -213,7 +213,7 @@ class PurchaseLog{
 //   console.log("Async function executed");
 //   console.log( await MoneyGetter.getAll());
 // })()
-module.exports = {
+export default {
   getservers: getservers,
   getserverbyname: getserverbyname,
   getserverbyuuid: getserverbyuuid,

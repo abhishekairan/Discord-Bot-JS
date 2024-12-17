@@ -10,4 +10,4 @@ function modal_single_field(field_label ,title, customId){
 }
 
 
-module.exports = {modal_single_field}
+export default {modal_single_field}

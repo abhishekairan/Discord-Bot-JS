@@ -1,10 +1,11 @@
-import pteroconsole from '../../pterodactyl-api/Client/console';
+import pteroconsole from '../../pterodactyl-api/Client/console.js';
 import { SlashCommandBuilder, EmbedBuilder, Embed } from 'discord.js';
-import { roles,colors } from '../../config.json';
-import { Websocket,getSocketCredientials } from '../../pterodactyl-api/Client/WebSocket';
-import { getserverbyname } from '../../database/getter';
+import configs from '../../config.json' assert { type: 'json' };
+const { roles,colors } = configs
+import { Websocket,getSocketCredientials } from '../../pterodactyl-api/Client/WebSocket.js';
+import { getserverbyname } from '../../database/getter.js';
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('balance')
         .setDescription("Check your in-game balance")

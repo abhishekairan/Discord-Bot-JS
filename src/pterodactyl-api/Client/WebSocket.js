@@ -1,11 +1,12 @@
 import WebSocket from 'ws';
-import { panel } from '../../config.json';
+import configs from '../../config.json' assert { type: 'json' };
+const { panel } = configs
 
 
 
 
 // Function to clear string br remove the console sttributes
-function cleanString(input) {
+export function cleanString(input) {
     // Regular expression to match ANSI escape codes
     const ansiRegex = /\x1B\[[0-9;]*[A-Za-z]/g;
     let newinput = input.replace(ansiRegex, '').replace(/\r|\x1B\[K/g, '').trim();
@@ -18,7 +19,7 @@ function cleanString(input) {
 
 
 // Function to remove the timestamp from the message
-function removeTimestamps(message) {
+export function removeTimestamps(message) {
     // Regular expression to match the timestamp and the "[INFO]: " part
     const timestampRegex = /\[\d{2}:\d{2}:\d{2} INFO\]:\s*/g;
     
@@ -28,7 +29,7 @@ function removeTimestamps(message) {
 
 
 // function to get token and socket from the panel
-async function getSocketCredientials(serverid){
+export async function getSocketCredientials(serverid){
   
   // Making fetch request to the panel to get websocket url and token 
   const req = await fetch(`${panel.ClientURL}/servers/${serverid}/websocket`, {
@@ -43,7 +44,7 @@ async function getSocketCredientials(serverid){
 
 
 
-class Websocket extends WebSocket{
+export class Websocket extends WebSocket{
     
   constructor(creds){
     super(creds.socket) // setting up socket url
@@ -186,5 +187,5 @@ class Websocket extends WebSocket{
 }
 
 
-module.exports = {
+export default {
     removeTimestamps: removeTimestamps, cleanString:cleanString, Websocket: Websocket, getSocketCredientials: getSocketCredientials}

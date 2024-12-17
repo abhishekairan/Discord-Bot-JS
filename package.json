@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "discord bot build with javascript",
   "main": "src/index.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --experimental-json-modules"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,8 @@
     "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7",
     "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }

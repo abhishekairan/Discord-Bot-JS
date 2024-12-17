@@ -2,7 +2,7 @@ import { Events } from "discord.js";
 import Embeds from '../utils/componenets/embeds';
 
 
-module.exports = {
+export default {
     name: Events.InteractionCreate,
     async execute(interaction){
         // console.log("new interaction create");

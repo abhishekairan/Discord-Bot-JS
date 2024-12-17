@@ -1,11 +1,11 @@
 import { Events } from 'discord.js';
 import { Database } from '../database/models';
 import getservers from '../pterodactyl-api/Application/getservers';
-import getter from '../database/getter';
+import getter from '../database/getter.js';
 import setters from '../database/setters';
 
 
-module.exports = {
+export default {
 	name: Events.ClientReady,
 	once: true,
 	async execute(client) {

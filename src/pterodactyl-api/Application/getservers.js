@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { panel } from '../../config.json';
+import configs from '../../config.json' assert { type: 'json' };
+const { panel } = configs
 
-module.exports = async (id) => {
+export default async (id) => {
     const ApplicationKey = panel.APPLICATIONKEY
     const ApplicationURL = panel.ApplicationURL
     // console.log(id);

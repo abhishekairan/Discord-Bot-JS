@@ -1,15 +1,18 @@
 import 'dotenv/config';
 import WebSocket from 'ws';
-import { panel,roles } from '../../config.json';
-import getter from '../../database/getter';
-import power from '../../pterodactyl-api/Client/power';
-import pteroconsole from '../../pterodactyl-api/Client/console';
-import getservers from '../../pterodactyl-api/Application/getservers';
-import {serverStartButton,serverRestartButton,serverStopButton,serverKillButton} from "../../utils/componenets/buttons";
+import configs from '../../config.json' assert { type: 'json' };
+const { panel,roles } = configs
+import getter from '../../database/getter.js';
+import power from '../../pterodactyl-api/Client/power.js';
+import pteroconsole from '../../pterodactyl-api/Client/console.js';
+import getservers from '../../pterodactyl-api/Application/getservers.js';
+import {serverStartButton,serverRestartButton,serverStopButton,serverKillButton} from "../../utils/componenets/buttons.js";
 import { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits, ActionRowBuilder } from 'discord.js';
 
+const server = await getter.getservers()
+console.log(server);
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
     .setName("server")
     .setDescription("Server name")

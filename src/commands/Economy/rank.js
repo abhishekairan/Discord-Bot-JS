@@ -1,11 +1,12 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
-import { Websocket, getSocketCredientials } from "../../pterodactyl-api/Client/WebSocket";
-import pteroconsole from '../../pterodactyl-api/Client/console';
-import { getserverbyname } from "../../database/getter";
-import {colors,roles} from '../../config.json';
+import { Websocket, getSocketCredientials } from "../../pterodactyl-api/Client/WebSocket.js";
+import pteroconsole from '../../pterodactyl-api/Client/console.js';
+import { getserverbyname } from "../../database/getter.js";
+import configs from '../../config.json' assert { type: 'json' };
+const {colors,roles} = configs
 
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('rank')
         .setDescription("Add/Remove the premium ranks of the player")

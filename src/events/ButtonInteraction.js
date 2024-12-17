@@ -1,9 +1,10 @@
 import { Events, BurstHandlerMajorIdKey } from 'discord.js';
 import ModelBuilder from '../utils/componenets/models';
-import { roles } from '../config.json';
+import configs from '../config.json' assert { type: 'json' };
+const { roles } = configs
 import power from '../pterodactyl-api/Client/power';
 
-module.exports = {
+export default {
     name: Events.InteractionCreate,
     async execute(interaction){
         // console.log(interaction)

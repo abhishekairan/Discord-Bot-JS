@@ -1,7 +1,7 @@
 import { Sequelize , DataTypes} from 'sequelize'
 
 
-const Database = new Sequelize('database', 'username', 'password', {
+export const Database = new Sequelize('keni', 'username', 'password', {
 	host: 'localhost',
 	dialect: 'sqlite',
 	logging: false,
@@ -9,7 +9,7 @@ const Database = new Sequelize('database', 'username', 'password', {
 	storage: 'database.sqlite',
 });
 
-const Servers = Database.define('servers', {
+export const Servers = Database.define('servers', {
 	id: {
 		type: DataTypes.INTEGER,
 		primaryKey: true
@@ -20,7 +20,7 @@ const Servers = Database.define('servers', {
 })
 
 
-const Money = Database.define('money', {
+export const Money = Database.define('money', {
 	id: {
 		type: DataTypes.INTEGER,
 		primaryKey: true
@@ -50,7 +50,7 @@ const Money = Database.define('money', {
 })
 
 
-const Coin = Database.define('coin', {
+export const Coin = Database.define('coin', {
 	id: {
 		type: DataTypes.INTEGER,
 		primaryKey: true
@@ -79,7 +79,7 @@ const Coin = Database.define('coin', {
 
 })
 
-const Rank = Database.define('rank',{
+export const Rank = Database.define('rank',{
 	id:{
 		type: DataTypes.INTEGER,
 		primaryKey: true
@@ -112,4 +112,4 @@ const Rank = Database.define('rank',{
 	
 })
 
-module.exports = {Database,Servers,Money,Rank,Coin}
+export default {Database,Servers,Money,Rank,Coin}

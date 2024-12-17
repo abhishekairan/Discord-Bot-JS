@@ -1,7 +1,8 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
-import {roles} from '../../config.json';
+import configs from '../../config.json' assert { type: 'json' };
+const {roles} = configs
 
-module.exports= {
+export default {
     data: new SlashCommandBuilder()
         .setName("embed")
         .setDescription("Create a embed")

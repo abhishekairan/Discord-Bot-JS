@@ -1,6 +1,6 @@
 import https from 'https';
 
-module.exports = async (ip,bedrock) => {
+export default async (ip,bedrock) => {
 
     let URL = "https://api.mcsrvstat.us/3/"
     

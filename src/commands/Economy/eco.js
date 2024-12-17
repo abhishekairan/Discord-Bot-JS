@@ -1,10 +1,11 @@
 import { SlashCommandBuilder, EmbedBuilder, Embed } from 'discord.js';
-import { roles, colors,logChannels } from '../../config.json';
-import { getSocketCredientials,Websocket } from '../../pterodactyl-api/Client/WebSocket';
-import { getserverbyname } from '../../database/getter';
-import pteraconsole from '../../pterodactyl-api/Client/console';
+import configs from '../../config.json' assert { type: 'json' };
+const { roles, colors,logChannels } = configs
+import { getSocketCredientials,Websocket } from '../../pterodactyl-api/Client/WebSocket.js';
+import { getserverbyname } from '../../database/getter.js';
+import pteraconsole from '../../pterodactyl-api/Client/console.js';
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName('eco')
         .setDescription("Edit the amount of a player has")

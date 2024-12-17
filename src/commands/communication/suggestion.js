@@ -1,7 +1,8 @@
 import { SlashCommandBuilder , EmbedBuilder } from "discord.js";
-import { Channels } from "../../config.json";
+import configs from "../../config.json" assert { type: 'json' };
+const { Channels } = configs
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder().setName("suggestion").setDescription("Suggest something to the server").addStringOption(option => 
         option.setName('message')
               .setDescription('The suggestion message')

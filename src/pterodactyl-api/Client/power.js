@@ -1,11 +1,12 @@
 import axios from 'axios';
-import { panel } from '../../config.json';
+import configs from '../../config.json' assert { type: 'json' };
+const { panel } = configs
 
 
 const ClientKey = panel.CLIENTKEY
 const ClientURL = panel.ClientURL
 
-async function start(serverIndentifier) {
+export async function start(serverIndentifier) {
     const RequestUrl = `${ClientURL}/servers/${serverIndentifier}/power`
     try{
         const response = axios.post(RequestUrl, {
@@ -21,7 +22,7 @@ async function start(serverIndentifier) {
     }
 }
 
-async function stop(serverIndentifier) {
+export async function stop(serverIndentifier) {
     const RequestUrl = `${ClientURL}/servers/${serverIndentifier}/power`
     try{
         const response = axios.post(RequestUrl, {
@@ -37,7 +38,7 @@ async function stop(serverIndentifier) {
     }
 }
 
-async function restart(serverIndentifier) {
+export async function restart(serverIndentifier) {
     const RequestUrl = `${ClientURL}/servers/${serverIndentifier}/power`
     try{
         const response = axios.post(RequestUrl, {
@@ -53,7 +54,7 @@ async function restart(serverIndentifier) {
     }
 }
 
-async function kill(serverIndentifier) {
+export async function kill(serverIndentifier) {
     const RequestUrl = `${ClientURL}/servers/${serverIndentifier}/power`
     try{
         const response = axios.post(RequestUrl, {
@@ -69,7 +70,7 @@ async function kill(serverIndentifier) {
     }
 }
 
-module.exports = {
+export default {
     start: start,
     stop: stop,
     restart: restart,

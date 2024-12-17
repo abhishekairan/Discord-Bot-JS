@@ -13,4 +13,4 @@ const store_select_menu = new StringSelectMenuBuilder()
 )
 
 
-module.exports = { store_select_menu: store_select_menu }
+export default {store_select_menu }
