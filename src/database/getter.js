@@ -1,4 +1,49 @@
-import { Database, Servers,Money,Rank,Coin } from './models.js'
+import { Database, Servers,Money,Rank,Coin, PanelDB } from './models.js'
+
+
+export async function getPlayerUUID(playername){
+  const [result] = await PanelDB.query("select id from PlayerPurse where username=?", playername)
+  return result[0].id
+}
+
+export async function getPlayerPurseBalance(playerUUID){
+  const [result] = await PanelDB.query("select coins from PlayerPurse where id=?",playerUUID)
+  if (result[0]) return result[0].coins
+  return 0
+}
+
+export async function getPlayerPersonalBankBalance(playerUUID){
+  const [result] = await PanelDB.query("select coins from PersonalBank where id=?",playerUUID)
+  if (result[0]) return result[0].coins
+  return 0
+}
+
+export async function getPlayerSharedBankBalance(playerUUID){
+  const [result] = await PanelDB.query("select coins from SharedBank where id=?",playerUUID)
+  if (result[0]) return result[0].coins
+  return 0
+}
+
+export async function getPlayerClubCoinBalance(playerUUID){
+  const [result] = await PanelDB.query("select coins from RoyaleEconomyclubcoins where id=?",playerUUID)
+  if (result[0]) return result[0].coins
+  return 0
+}
+
+export async function getPlayerBalance(playerUUID){
+  const SharedBankBalance = await getPlayerSharedBankBalance(playerUUID)
+  const personalBankBalance = await getPlayerPersonalBankBalance(playerUUID)
+  const purseBalance = await getPlayerPurseBalance(playerUUID)
+  const clubcoinBalance = await getPlayerClubCoinBalance(playerUUID)
+  return {
+    SharedBankBalance : SharedBankBalance,
+    personalBankBalance : personalBankBalance,
+    purseBalance : purseBalance,
+    clubcoinBalance : clubcoinBalance,
+    total: purseBalance + personalBankBalance
+  }
+}
+
 
 
 export function getCurrentISTDate() {

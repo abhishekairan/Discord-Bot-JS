@@ -1,5 +1,10 @@
 import { Sequelize , DataTypes} from 'sequelize'
+import dotenv from 'dotenv'
+import mysql from 'mysql2'
 
+dotenv.config()
+
+// export const PanelDB = 
 
 export const Database = new Sequelize('keni', 'username', 'password', {
 	host: 'localhost',
@@ -8,6 +13,14 @@ export const Database = new Sequelize('keni', 'username', 'password', {
 	// SQLite only
 	storage: 'database.sqlite',
 });
+
+
+export const PanelDB = await mysql.createPool({
+	host: process.env.DB_HOST,
+	user: process.env.DB_USERNAME,
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_NAME,
+}).promise()
 
 export const Servers = Database.define('servers', {
 	id: {

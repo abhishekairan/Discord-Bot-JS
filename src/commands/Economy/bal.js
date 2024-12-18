@@ -3,7 +3,8 @@ import { SlashCommandBuilder, EmbedBuilder, Embed } from 'discord.js';
 import configs from '../../config.json' assert { type: 'json' };
 const { roles,colors } = configs
 import { Websocket,getSocketCredientials } from '../../pterodactyl-api/Client/WebSocket.js';
-import { getserverbyname } from '../../database/getter.js';
+import { getserverbyname,getPlayerUUID,getPlayerBalance } from '../../database/getter.js';
+import { PanelDB } from '../../database/models.js';
 
 export default {
     data: new SlashCommandBuilder()
@@ -24,10 +25,10 @@ export default {
         if(playerOption){
             // if the user not having team role returning the error message 
             if(!interaction.member.roles.cache.has(roles.team)){
-                embed = new EmbedBuilder()
+                const embed = new EmbedBuilder()
                     .setTitle("Permission Denied")
                     .setDescription("Only staff member can check other user balance")
-                    .setColor()
+                    .setColor(colors.red)
                 return interaction.reply({embeds: [embed],ephemeral:true})
             }else{
                 player = await interaction.guild.members.fetch(playerOption.id) 
@@ -39,41 +40,33 @@ export default {
         }
         // checking wheather the user has linekd role or command user has the team role
         if (player.roles.cache.has(roles.linked) || interaction.member.roles.cache.has(roles.team)){
-            const {uuid} = await getserverbyname("CCS")
-            const creds = await getSocketCredientials(uuid)
-            const ws = await new Websocket(creds).setEcoListners()
+            // getting the player uuid from the database 
+            
             await interaction.deferReply()
-
-            ws.on('balanceof',(e)=>{
-                if(e.message.includes(player.nickname)){
-                    const embed = new EmbedBuilder()
-                        .setDescription(e.message)
-                        .setColor(colors.green)
-                    interaction.editReply({embeds:[embed]})
-                    ws.close()
-                    return
-                }
-            })
-
-            ws.on('player not found',()=>{
-                const embed = new EmbedBuilder()
-                    .setTitle("Player Not Found")
-                    .setDescription(`Make sure you have linked your account!!!`)
-                    .setColor(colors.red)
-                interaction.editReply({embeds: [embed]})
-                ws.close()
-            })
-
             try{
-                await pteroconsole(uuid,`bal ${player.nickname}`) // sending the balance command to the server
+                const playerUUID = await getPlayerUUID(player.nickname)
+                const playerBalance = await getPlayerBalance(playerUUID)
+                // console.log(playerUUID);
+                // console.log(playerBalance);
+                const embed = new EmbedBuilder()
+                    .setTitle(`${player.nickname}'s Balance`)
+                    .setDescription(`
+- **Purse** : ${playerBalance.purseBalance.toLocaleString('en-US')} 💵
+- **Bank** : ${playerBalance.personalBankBalance.toLocaleString('en-US')} 💵
+> **Total** : ${playerBalance.total.toLocaleString('en-US')} 💵
+
+- **Club Coins** : ${playerBalance.clubcoinBalance.toLocaleString('en-US')} 🪙`
+                    )
+                    .setColor(colors.green)
+                interaction.editReply({embeds:[embed]})
             }catch{
                 const embed = new EmbedBuilder()
                     .setTitle("Player Not Found")
                     .setDescription(`Make sure you have linked your account!!!`)
                     .setColor(colors.red)
-                return interaction.reply({embeds: [embed]})
+                return interaction.editReply({embeds: [embed]})
             }
-                
+
         }
     }
 }

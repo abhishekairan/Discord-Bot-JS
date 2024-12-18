@@ -2,8 +2,10 @@ import { SlashCommandBuilder, EmbedBuilder, Embed } from 'discord.js';
 import configs from '../../config.json' assert { type: 'json' };
 const { roles, colors,logChannels } = configs
 import { getSocketCredientials,Websocket } from '../../pterodactyl-api/Client/WebSocket.js';
-import { getserverbyname } from '../../database/getter.js';
+import { getserverbyname, getPlayerUUID,getPlayerBalance } from '../../database/getter.js';
+import { PanelDB } from '../../database/models.js';
 import pteraconsole from '../../pterodactyl-api/Client/console.js';
+
 
 export default {
     data: new SlashCommandBuilder()
@@ -57,6 +59,8 @@ export default {
             
             const creds = await getSocketCredientials(uuid)
             if(!moneyType){
+
+
                 const ws = await new Websocket(creds).setEcoListners()
             
                 // player not found listner
