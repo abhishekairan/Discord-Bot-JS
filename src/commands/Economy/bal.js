@@ -1,5 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import configs from '../../config.json' assert { type: 'json' };
+import { getPlayerUUID,getPlayerBalance } from '../../database/getter.js';
 const { roles,colors } = configs
 
 export default {
@@ -42,8 +43,8 @@ export default {
             try{
                 const playerUUID = await getPlayerUUID(player.nickname)
                 const playerBalance = await getPlayerBalance(playerUUID)
-                console.log(playerUUID);
-                console.log(playerBalance);
+                // console.log(playerUUID);
+                // console.log(playerBalance);
                 const embed = new EmbedBuilder()
                     .setTitle(`${player.nickname}'s Balance`)
                     .setDescription(`
@@ -55,7 +56,8 @@ export default {
                     )
                     .setColor(colors.green)
                 interaction.editReply({embeds:[embed]})
-            }catch{
+            }catch(err){
+                console.log(err);
                 const embed = new EmbedBuilder()
                     .setTitle("Player Not Found")
                     .setDescription(`Make sure you have linked your account!!!`)

@@ -46,7 +46,8 @@ export default {
         try{
             playerUUID = await getPlayerUUID(player.nickname)
             userUUID = await getPlayerUUID(user.nickname)
-        }catch{
+        }catch(err){
+            console.log(err);
             const embed = new EmbedBuilder()
                 .setTitle("Player Not Found")
                 .setDescription(`Make sure both of you have linked your account!!!`)
