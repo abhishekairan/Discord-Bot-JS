@@ -1,4 +1,41 @@
-import {Money,Rank,Coin,Servers} from './models.js';
+import {Money,Rank,Coin,Servers,PanelDB} from './models.js';
+
+export async function setPlayerPurseBalance(playerUUID, coins) {
+	await PanelDB.query("UPDATE PlayerPurse SET coins = ? WHERE id = ?", [coins, playerUUID]);
+}
+
+export async function setPlayerPersonalBankBalance(playerUUID, coins) {
+	await PanelDB.query("UPDATE PersonalBank SET coins = ? WHERE id = ?", [coins, playerUUID]);
+}
+
+export async function setPlayerSharedBankBalance(playerUUID, coins) {
+	await PanelDB.query("UPDATE SharedBank SET coins = ? WHERE id = ?", [coins, playerUUID]);
+}
+
+export async function setPlayerClubCoinBalance(playerUUID, coins) {
+	await PanelDB.query("UPDATE RoyaleEconomyclubcoins SET coins = ? WHERE id = ?", [coins, playerUUID]);
+}
+
+export async function updatePlayerBalances(playerUUID, balances) {
+	const { SharedBankBalance, personalBankBalance, purseBalance, clubcoinBalance } = balances;
+
+	if (SharedBankBalance !== undefined) {
+		await setPlayerSharedBankBalance(playerUUID, SharedBankBalance);
+	}
+
+	if (personalBankBalance !== undefined) {
+		await setPlayerPersonalBankBalance(playerUUID, personalBankBalance);
+	}
+
+	if (purseBalance !== undefined) {
+		await setPlayerPurseBalance(playerUUID, purseBalance);
+	}
+
+	if (clubcoinBalance !== undefined) {
+		await setPlayerClubCoinBalance(playerUUID, clubcoinBalance);
+	}
+}
+
 
 
 export function addServer(id,uuid,name,identifier) {

@@ -1,8 +1,7 @@
-import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
-import { Websocket,getSocketCredientials } from '../../pterodactyl-api/Client/WebSocket.js';
-import  { getserverbyname } from '../../database/getter.js';
-import pteroconsole from '../../pterodactyl-api/Client/console.js';
+import { SlashCommandBuilder, EmbedBuilder, Embed } from 'discord.js';
+import  { getPlayerUUID,getPlayerBalance } from '../../database/getter.js';
 import configs from '../../config.json' assert { type: 'json' };
+import {setPlayerPersonalBankBalance,setPlayerPurseBalance} from '../../database/setters.js';
 const { logChannels, roles, colors } = configs
 
 
@@ -21,65 +20,67 @@ export default {
             .setName("amount")
             .setDescription("Amount of money you want to pay")
             .setRequired(true)
+        )
+        .addStringOption(option => option
+            .setName('from')
+            .setDescription("From which account you want to transfer money")
+            .setChoices(
+                {name:'Purse',value:'purse'},
+                {name:'Bank',value:'bank'}
+            )
+            .setRequired(true)
         ),
     async execute(interaction) {
         // Creating Variables to storing information 
-        const { uuid } = await getserverbyname('CCS') // UUID of the main server
         const amount = interaction.options.getInteger('amount') // amount to paid
         const user = interaction.member // member which is paying
+        const AccountType = interaction.options.getString('from')
         const player = await interaction.guild.members.fetch(interaction.options.getUser('player').id) // player to be paid
         const logchannel = await interaction.guild.channels.fetch(logChannels.pay) // Channel which will log the transactions
         let balance = 0// Balance of the user after paying
         if(!(user.roles.cache.has(roles.linked)) || !(player.roles.cache.has(roles.linked))){
             return interaction.reply({content:`Make sure you both have linked your account!!!`})
         }
-        const creds = await getSocketCredientials(uuid)
-        const ws = await new Websocket(creds).setEcoListners() // Web socket connection to communicate with server 
-
+        let playerUUID
+        let userUUID
+        try{
+            playerUUID = await getPlayerUUID(player.nickname)
+            userUUID = await getPlayerUUID(user.nickname)
+        }catch{
+            const embed = new EmbedBuilder()
+                .setTitle("Player Not Found")
+                .setDescription(`Make sure both of you have linked your account!!!`)
+                .setColor(colors.red)
+            return await interaction.reply({embeds: [embed]})
+        }
         // Defering the interaction reply to edit it later according to the conditions 
         await interaction.deferReply()
 
-        // Adding a consoleMessage listner to websocket which will perform the authnetications and processes
-
         // Checking the balance of user to performance the transaction, if user have enough balance deduct the amount to be paid from the user account
-        ws.on('balanceof',(data)=>{
-            if(data.message.includes(`${user.nickname}`)){
-                if(data.balance>=amount){
-                    ws.send(JSON.stringify({'event':'send command','args':[`eco take ${user.nickname} ${amount}`]})) // Deducting the amount from the user 
-                }else{
-                    interaction.editReply({content:`You are broke to perform this transaction`}) // User is broke
-                    ws.close() // Closing connection 
-                }
-            }
-        })
-
-        // Checking if user money is deducted or not
-        ws.on("eco taken",(data)=>{
-            if(data.message.includes(`${user.nickname}`) && data.amount === amount){
-                ws.send(JSON.stringify({'event':'send command','args':[`eco give ${player.nickname} ${amount}`]})) 
-            }
-        })
-
-        // Checking if player recived money or not
-        ws.on('eco recived',(data)=>{
-            if(data.message.includes(`${player.nickname}`) && data.amount === amount){
-                const embed = new EmbedBuilder().setTitle("Transaction Successfull").setDescription(`Paid ${data.message.split(' ')[0]} to ${player}`).setColor(colors.green)
-                interaction.editReply({embeds: [embed]})
-                const logembed = new EmbedBuilder().setTimestamp().setDescription(`${user.nickname} paid ${amount} to ${player.nickname}`)
-                ws.close()  
-                logchannel.send({embeds:[logembed]}) 
-            }
-        })
-
-        ws.on('player not found',()=>{
+        const userBalance = await getPlayerBalance(userUUID)
+        const playerBalance = await getPlayerBalance(playerUUID)
+        if(AccountType==='purse'){
             const embed = new EmbedBuilder()
-                .setTitle("Player Not Found")
-                .setDescription(`Make sure you have linked your account!!!`)
-                .setColor(colors.red)
-            interaction.editReply({embeds: [embed]})
-            ws.close()
-        })
-        await pteroconsole(uuid,`bal ${user.nickname}`)
+            if(userBalance.purseBalance >= amount){
+                await setPlayerPurseBalance(userUUID,userBalance.purseBalance-amount)
+                await setPlayerPurseBalance(playerUUID,playerBalance.purseBalance+amount)
+                embed.setTitle('Transaction Successfull!!!').setColor(colors.green).setDescription(`You paid ${player} ${amount.toLocaleString('en-US')} 💵 from your purse`)
+                const logembed = new EmbedBuilder().setTimestamp().setDescription(`${user} paid ${amount.toLocaleString('en-US')} to ${player} from purse`)  
+                await logchannel.send({embeds:[logembed]}) 
+            }else{
+                embed.setTitle('Transaction Failed!!!').setColor(colors.red).setDescription("You don't have enough money to perform this transaction")
+            }
+            return await interaction.editReply({embeds: [embed]})
+        }else if(AccountType==='bank'){
+            const embed = new EmbedBuilder()
+            if(userBalance.personalBankBalance >= amount){
+                await setPlayerPurseBalance(userUUID,userBalance.personalBankBalance-amount)
+                await setPlayerPurseBalance(playerUUID,playerBalance.purseBalance+amount)
+                embed.setTitle('Transaction Successfull!!!').setColor(colors.green).setDescription(`You paid ${player} ${amount.toLocaleString('en-US')} 💵 from your Bank`)
+            }else{
+                embed.setTitle('Transaction Failed!!!').setColor(colors.red).setDescription("You don't have enough money to perform this transaction")
+            }
+            return await interaction.editReply({embeds: [embed]})
+        }
     }
-
-    }
+}

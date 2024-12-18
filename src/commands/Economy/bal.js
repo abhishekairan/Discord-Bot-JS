@@ -1,10 +1,6 @@
-import pteroconsole from '../../pterodactyl-api/Client/console.js';
-import { SlashCommandBuilder, EmbedBuilder, Embed } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import configs from '../../config.json' assert { type: 'json' };
 const { roles,colors } = configs
-import { Websocket,getSocketCredientials } from '../../pterodactyl-api/Client/WebSocket.js';
-import { getserverbyname,getPlayerUUID,getPlayerBalance } from '../../database/getter.js';
-import { PanelDB } from '../../database/models.js';
 
 export default {
     data: new SlashCommandBuilder()
@@ -46,8 +42,8 @@ export default {
             try{
                 const playerUUID = await getPlayerUUID(player.nickname)
                 const playerBalance = await getPlayerBalance(playerUUID)
-                // console.log(playerUUID);
-                // console.log(playerBalance);
+                console.log(playerUUID);
+                console.log(playerBalance);
                 const embed = new EmbedBuilder()
                     .setTitle(`${player.nickname}'s Balance`)
                     .setDescription(`
