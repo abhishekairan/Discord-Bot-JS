@@ -1,5 +1,5 @@
 import { Events } from "discord.js";
-import Embeds from '../utils/componenets/embeds';
+import Embeds from '../utils/componenets/embeds.js';
 
 
 export default {

@@ -1,4 +1,5 @@
-import { Channels } from '../config.json' assert { type: 'json' };
+import configs from '../config.json' assert { type: 'json' };
+const { Channels } = configs
 
 export default {
     name: "guildMemberRemove",

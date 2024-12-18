@@ -1,8 +1,8 @@
 import { Events, BurstHandlerMajorIdKey } from 'discord.js';
-import ModelBuilder from '../utils/componenets/models';
+import ModelBuilder from '../utils/componenets/models.js';
 import configs from '../config.json' assert { type: 'json' };
 const { roles } = configs
-import power from '../pterodactyl-api/Client/power';
+import power from '../pterodactyl-api/Client/power.js';
 
 export default {
     name: Events.InteractionCreate,
