@@ -74,10 +74,10 @@ const data = new SlashCommandBuilder()
 export default {
     data: data,
     async execute(interaction){
-        // if(!interaction.member.roles.cache.has(roles.manager)) {
-        //     const embed = new EmbedBuilder().setTitle("Permission Denied").setDescription("Only Managers are allowed to use this command")
-        //     return interaction.reply({embeds: [embed],ephemeral: true})
-        // }
+        if(!interaction.member.roles.cache.has(roles.manager)) {
+            const embed = new EmbedBuilder().setTitle("Permission Denied").setDescription("Only Managers are allowed to use this command")
+            return interaction.reply({embeds: [embed],ephemeral: true})
+        }
         // console.log(interaction);
         const embed = new EmbedBuilder()
         const cmd = interaction.options.getSubcommand()
