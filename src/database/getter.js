@@ -3,7 +3,10 @@ import { Database, Servers,Money,Rank,Coin, PanelDB } from './models.js'
 
 export async function getPlayerUUID(playername){
   const [result] = await PanelDB.query("select id from PlayerPurse where username=?", playername)
-  return result[0].id
+  if (result[0]) {
+    return result[0].id
+  }
+  return undefined
 }
 
 export async function getPlayerPurseBalance(playerUUID){

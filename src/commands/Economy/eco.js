@@ -1,10 +1,8 @@
-import { SlashCommandBuilder, EmbedBuilder, Embed } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import configs from '../../config.json' assert { type: 'json' };
 const { roles, colors,logChannels } = configs
-import { getSocketCredientials,Websocket } from '../../pterodactyl-api/Client/WebSocket.js';
-import { getserverbyname, getPlayerUUID,getPlayerBalance } from '../../database/getter.js';
-import { PanelDB } from '../../database/models.js';
-import pteraconsole from '../../pterodactyl-api/Client/console.js';
+import { getPlayerUUID,getPlayerBalance } from '../../database/getter.js';
+import { setPlayerClubCoinBalance, setPlayerPersonalBankBalance, setPlayerPurseBalance, updatePlayerBalances } from '../../database/setters.js';
 
 
 export default {
@@ -19,7 +17,6 @@ export default {
                 { name: 'give', value: 'give' },
                 { name: 'take', value: 'take' },
                 { name: 'set', value: 'set' },
-                { name: 'reset', value: 'reset' },
             )
         )
         .addUserOption(option => option
@@ -33,18 +30,18 @@ export default {
             .setRequired(true)
         )
         .addBooleanOption(option => option
-            .setName('point')
-            .setDescription("Do you want to change the money type to points?")
+            .setName('clubcoins')
+            .setDescription("Do you want to change the money type to clubcoins?")
             .setRequired(false)
         ),
 
 
     async execute(interaction){
-
+        // console.log('command is executed');
         const player = await interaction.guild.members.fetch(interaction.options.getUser('player').id)
         const amount = interaction.options.getInteger('amount')
         const action = interaction.options.getString('action')
-        const moneyType = interaction.options.getBoolean('point')
+        const moneyType = interaction.options.getBoolean('clubcoins')
 
         if (interaction.member.roles.cache.has(roles.manager)){
             if(!player.roles.cache.has(roles.linked)){
@@ -52,146 +49,80 @@ export default {
                 return interaction.reply({embeds: [embed]})
             }
             await interaction.deferReply()
-            const {uuid} = await getserverbyname("CCS")
             
             const logchannel = await interaction.guild.channels.fetch(logChannels.pay) // Channel which will log the transactions
             const logEmbed = new EmbedBuilder().setTitle("Transaction Log").setAuthor({name:`${interaction.member.displayName}`,iconURL:interaction.member.displayAvatarURL()}).setTimestamp()
-            
-            const creds = await getSocketCredientials(uuid)
-            if(!moneyType){
-
-
-                const ws = await new Websocket(creds).setEcoListners()
-            
-                // player not found listner
-                ws.on('player not found',(e) => {
-                    interaction.editReply({content:`Make sure ${player.nickname} have linked your account!!!`})
-                    ws.close()
-                })
-
-                // Money add listner
-                ws.on('eco recived',(data) => {
-                    if(data.message.includes(`${player.nickname}`) && amount === data.amount){
-                        const embed = new EmbedBuilder()
-                        embed.setTitle("Transaction Successfull").setDescription(data.message).setColor(colors.green)
-                        interaction.editReply({embeds: [embed]})
-                        ws.close()
-                        logEmbed.setDescription(data.message)
-                        logchannel.send({embeds:[logEmbed]}) 
-                    }
-                })
-
-                // Money taken listner
-                ws.on('eco taken',(data)=>{
-                    if(data.message.includes(`${player.nickname}`) && amount === data.amount){
-                        const embed = new EmbedBuilder()
-                        embed.setTitle("Transaction Successfull").setDescription(data.message).setColor(colors.green)
-                        interaction.editReply({embeds: [embed]})
-                        ws.close()
-                        logEmbed.setDescription(data.message)
-                        logchannel.send({embeds:[logEmbed]})
-                    }
-                })
-
-                // Money set listner
-                ws.on('eco set',(data)=>{
-                    if(data.message.includes(`${player.nickname}'s` && amount === data.amount)){
-                        const embed = new EmbedBuilder()
-                        embed.setTitle("Transaction Successfull").setDescription(data.message).setColor(colors.green)
-                        interaction.editReply({embeds: [embed]})
-                        ws.close()
-                        logEmbed.setDescription(data.message)
-                        logchannel.send({embeds:[logEmbed]}) 
-                    }
-                })
-
-                if (action == 'give'){
-                    pteraconsole(uuid,`eco give ${player.nickname} ${amount}`)
-                }else if (action == 'take'){
-                    pteraconsole(uuid,`eco take ${player.nickname} ${amount}`)
-                }else if (action == 'set'){
-                    pteraconsole(uuid,`eco set ${player.nickname} ${amount}`)
-                }else if (action == 'reset'){
-                    pteraconsole(uuid,`eco reset ${player.nickname} ${amount}`)
-                }
-                setTimeout(async () => {
-                    try {
-                        ws.close()  
-                    } catch (error) {}
-                }, 5000);
-            }else{
-                const ws = await new Websocket(creds).setPointListner()
-
-                // player not found listner
-                ws.on('player not found',(e) => {
-                    interaction.editReply({content:`Make sure ${player.nickname} have linked your account!!!`})
-                    ws.close()
-                })
-
-                // point given listner
-                ws.on('point given', (data) => {
-                    console.log(data.message);
-                    if(data.message.includes(`${player.nickname}`) && amount === data.amount){
-                        const embed = new EmbedBuilder()
-                        embed.setTitle("Transaction Successfull").setDescription(`ᴄʟᴜʙ ᴄᴏɪɴ ${player.nickname} was given ${amount} Points.`).setColor(colors.green)
-                        interaction.editReply({embeds: [embed]})
-                        ws.close()
-                        logEmbed.setDescription(data.message)
-                        logchannel.send({embeds:[logEmbed]}) 
-                    }
-                })
-
-                // Point took listner
-                ws.on('point took', (data) => {
-                    if(data.message.includes(`${player.nickname}.`) && amount === data.amount){
-                        const embed = new EmbedBuilder()
-                        embed.setTitle("Transaction Successfull").setDescription(`ᴄʟᴜʙ ᴄᴏɪɴ Took ${amount} Point from ${player.nickname}.`).setColor(colors.green)
-                        interaction.editReply({embeds: [embed]})
-                        ws.close()
-                        logEmbed.setDescription(data.message)
-                        logchannel.send({embeds:[logEmbed]}) 
-                    }
-                })
-
-                // Point setting listner
-                ws.on('point set',(data) => {
-                    if(data.message.includes(`${player.nickname}`) && amount===data.amount){
-                        const embed = new EmbedBuilder()
-                        embed.setTitle("Transaction Successfull").setDescription(`ᴄʟᴜʙ ᴄᴏɪɴ Set the Points of ${player.nickname} to ${amount}.`).setColor(colors.green)
-                        interaction.editReply({embeds: [embed]})
-                        ws.close()
-                        logEmbed.setDescription(data.message)
-                        logchannel.send({embeds:[logEmbed]}) 
-                    }
-                })
-
-                // Reseting player points
-                ws.on('point reset',(data) => {
-                    if(data.message.includes(`${player.nickname}.`)){
-                        const embed = new EmbedBuilder()
-                        embed.setTitle("Transaction Successfull").setDescription(`ᴄʟᴜʙ ᴄᴏɪɴ Reset the Points for ${player.nickname}.`).setColor(colors.green)
-                        interaction.editReply({embeds: [embed]})
-                        ws.close()
-                        logEmbed.setDescription(data.message)
-                        logchannel.send({embeds:[logEmbed]}) 
-                    }
-                })
-                if (action == 'give'){
-                    pteraconsole(uuid,`points give ${player.nickname} ${amount}`)
-                }else if (action == 'take'){
-                    pteraconsole(uuid,`points take ${player.nickname} ${amount}`)
-                }else if (action == 'set'){
-                    pteraconsole(uuid,`points set ${player.nickname} ${amount}`)
-                }else if (action == 'reset'){
-                    pteraconsole(uuid,`points reset ${player.nickname}`)
-                }
-                setTimeout(async () => {
-                    try {
-                        ws.close()  
-                    } catch (error) {}
-                }, 5000);
-
+            var playerUUID
+            var playerBalance
+            try{
+                playerUUID = await getPlayerUUID(player.nickname)
+                playerBalance = await getPlayerBalance(playerUUID)
+            }catch(err){
+                console.log(err);
+                const embed = new EmbedBuilder()
+                    .setTitle("Player Not Found")
+                    .setDescription(`Make sure both of you have linked your account!!!`)
+                    .setColor(colors.red)
+                return await interaction.reply({embeds: [embed]})
             }
+            const embed = new EmbedBuilder().setTitle('Transaction Successfull!!!').setColor(colors.green)
+            var newAmount = amount
+            if(!moneyType){
+                if(action==='give'){
+                    newAmount = playerBalance.purseBalance + amount
+                    await setPlayerPurseBalance(playerUUID,newAmount)
+                    embed.setDescription(`${amount.toLocaleString('en-US')} 💵 has been added to ${player}'s Purse successfully`)
+                    await interaction.editReply({embeds:[embed]})
+                }else if(action==='take'){
+                    if(playerBalance.purseBalance>amount){
+                        newAmount = playerBalance.purseBalance - amount
+                        await setPlayerPurseBalance(playerUUID,newAmount)
+                        embed.setDescription(`${amount.toLocaleString('en-US')} 💵 has been taken from ${player}'s Purse successfully`)
+                        await interaction.editReply({embeds:[embed]})
+                    }else if(playerBalance.personalBankBalance>amount){
+                        newAmount = playerBalance.personalBankBalance - amount
+                        await setPlayerPersonalBankBalance(playerUUID,newAmount)
+                        embed.setDescription(`${amount.toLocaleString('en-US')} 💵 has been taken from ${player}'s Bank successfully`)
+                        await interaction.editReply({embeds:[embed]})
+                    }else{
+                        embed.setTitle('Transaction Failed!!!').setColor(colors.red).setDescription("Player don't have enough money to take")
+                        return await interaction.editReply({embeds:[embed]})
+                    }
+                }else if(action==='set'){
+                    await updatePlayerBalances(playerUUID,{purseBalance:amount,personalBankBalance:0})
+                    embed.setDescription(`${player}'s Purse has been set to ${amount.toLocaleString('en-US')} 💵 successfully`)
+                    await interaction.editReply({embeds:[embed]})
+                }
+            }else{
+                if(action==='give'){
+                    newAmount = playerBalance.clubCoinsBalance + amount
+                    await setPlayerClubCoinsBalance(playerUUID,newAmount)
+                    embed.setDescription(`${amount.toLocaleString('en-US')}'s 🪙 has been added to ${player} successfully`)
+                    await interaction.editReply({embeds:[embed]})
+                }else if(action==='take'){
+                    if(playerBalance.clubCoinsBalance>amount){
+                        newAmount = playerBalance.clubCoinsBalance - amount
+                        await setPlayerClubCoinsBalance(playerUUID,newAmount)
+                        embed.setDescription(`${amount.toLocaleString('en-US')}'s 🪙 has been taken from ${player} successfully`)
+                        await interaction.editReply({embeds:[embed]})
+                    }else{
+                        embed.setTitle('Transaction Failed!!!').setColor(colors.red).setDescription("Player don't have enough club coins to take")
+                        return await interaction.editReply({embeds:[embed]})
+                    }
+                }else if(action==='set'){
+                    await setPlayerClubCoinBalance(playerUUID, amount)
+                    embed.setDescription(`${player}'s account has been set to ${amount.toLocaleString('en-US')} 🪙 successfully`)
+                    await interaction.editReply({embeds:[embed]})
+                }
+            }
+            
+            logEmbed.setDescription(`Action performed by: ${interaction.member}`).addFields([
+                {name:'player',value:`${player} (${player.nickname})`},
+                {name:'amount',value:`${amount.toLocaleString('en-US')} ${moneyType ? '🪙' : '💵'}`},
+                {name:'action',value:action}
+            ])  
+            return await logchannel.send({embeds:[logEmbed]})
+
         }else{
             const embed = new EmbedBuilder().setTitle("Permission Denied").setDescription("Only Managers are allowed to use this command")
             return interaction.reply({embeds: [embed]})
