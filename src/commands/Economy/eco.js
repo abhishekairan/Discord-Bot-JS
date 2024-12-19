@@ -95,13 +95,13 @@ export default {
                 }
             }else{
                 if(action==='give'){
-                    newAmount = playerBalance.clubCoinBalance + amount
+                    newAmount = playerBalance.clubcoinBalance + amount
                     await setPlayerClubCoinBalance(playerUUID,newAmount)
                     embed.setDescription(`${amount.toLocaleString('en-US')}'s 🪙 has been added to ${player} successfully`)
                     await interaction.editReply({embeds:[embed]})
                 }else if(action==='take'){
-                    if(playerBalance.clubCoinBalance>amount){
-                        newAmount = playerBalance.clubCoinBalance - amount
+                    if(playerBalance.clubcoinBalance>amount){
+                        newAmount = playerBalance.clubcoinBalance - amount
                         await setPlayerClubCoinBalance(playerUUID,newAmount)
                         embed.setDescription(`${amount.toLocaleString('en-US')}'s 🪙 has been taken from ${player} successfully`)
                         await interaction.editReply({embeds:[embed]})
