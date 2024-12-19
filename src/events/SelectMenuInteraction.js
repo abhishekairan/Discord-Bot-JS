@@ -25,6 +25,13 @@ export default {
                 case "ranks":
                     await interaction.message.edit({embeds: [Embeds.rankStore],components:[interaction.message.components[0]]})
                     return interaction.deferUpdate()
+                case 'keys':
+                    await interaction.message.edit({embeds: [Embeds.keyStore],components:[interaction.message.components[0]]})
+                    return interaction.deferUpdate()
+                case 'bundles':
+                    await interaction.message.edit({embeds: [Embeds.bundleStore],components:[interaction.message.components[0]]})
+                    return interaction.deferUpdate()
+                    
             }
         }
     }

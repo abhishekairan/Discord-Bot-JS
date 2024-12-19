@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --experimental-json-modules"
+    "dev": "nodemon --experimental-json-modules",
+    "deploy": "node src/deploy-commands.js"
   },
   "repository": {
     "type": "git",

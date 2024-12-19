@@ -13,6 +13,8 @@ export default {
                 { name: "Rank", value: "rank" },
                 { name: "Money", value: "money" },
                 { name: "Coins", value: "coin" },
+                { name: "Keys", value: "keys" },
+                { name: "Bundles", value: "bundles" },
             ])
         ),
         
@@ -28,6 +30,10 @@ export default {
             embed = Embeds.moneyStore;
         }else if(shop === "coin"){
             embed = Embeds.coinStore;
+        }else if(shop === 'keys'){
+            embed = Embeds.keyStore;
+        }else if(shop === 'bundles'){
+            embed = Embeds.bundleStore;
         }else{
             embed = new EmbedBuilder().setTitle("CCS STORE").setDescription("Select the store type from the below select menu")
         }
