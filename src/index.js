@@ -44,8 +44,10 @@ for (const file of eventFiles) {
 	const event = await import(fileUrl);
 	if (event.default.once) {
 		client.once(event.default.name, (...args) => event.default.execute(...args));
+		// console.log(`${event.default.name} Registered`);
 	} else {
 		client.on(event.default.name, (...args) => event.default.execute(...args));
+		// console.log(`${event.default.name} Registered`);
 	}
 }
 

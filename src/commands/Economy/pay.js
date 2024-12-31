@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder, Embed } from 'discord.js';
 import  { getPlayerUUID,getPlayerBalance } from '../../database/getter.js';
 import configs from '../../config.json' assert { type: 'json' };
-import {setPlayerPersonalBankBalance,setPlayerPurseBalance} from '../../database/setters.js';
+import {setPlayerPersonalBankBalance, setPlayerPurseBalance} from '../../database/setters.js';
 const { logChannels, roles, colors } = configs
 
 
@@ -75,8 +75,8 @@ export default {
         }else if(AccountType==='bank'){
             const embed = new EmbedBuilder()
             if(userBalance.personalBankBalance >= amount){
-                await setPlayerPurseBalance(userUUID,userBalance.personalBankBalance-amount)
-                await setPlayerPurseBalance(playerUUID,playerBalance.purseBalance+amount)
+                await setPlayerPersonalBankBalance(userUUID,userBalance.personalBankBalance-amount)
+                await setPlayerPersonalBankBalance(playerUUID,playerBalance.personalBankBalance+amount)
                 embed.setTitle('Transaction Successfull!!!').setColor(colors.green).setDescription(`You paid ${player} ${amount.toLocaleString('en-US')} 💵 from your Bank`)
             }else{
                 embed.setTitle('Transaction Failed!!!').setColor(colors.red).setDescription("You don't have enough money to perform this transaction")

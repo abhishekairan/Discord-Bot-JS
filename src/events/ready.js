@@ -29,5 +29,6 @@ export default {
 		} catch (error) {
 			console.log('Some error occure while updating server list');
 		}
+		// await client.emit(Events.GuildMemberAdd, {client})
 	},
 };
