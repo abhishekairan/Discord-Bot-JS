@@ -38,6 +38,9 @@ export default {
         const player = await interaction.guild.members.fetch(interaction.options.getUser('player').id) // player to be paid
         const logchannel = await interaction.guild.channels.fetch(logChannels.pay) // Channel which will log the transactions
         let balance = 0// Balance of the user after paying
+        if(user==player){
+            return interaction.reply({content:`You can not pay yourself!!!`})
+        }
         if(!(user.roles.cache.has(roles.linked)) || !(player.roles.cache.has(roles.linked))){
             return interaction.reply({content:`Make sure you both have linked your account!!!`})
         }
@@ -60,6 +63,7 @@ export default {
         // Checking the balance of user to performance the transaction, if user have enough balance deduct the amount to be paid from the user account
         const userBalance = await getPlayerBalance(userUUID)
         const playerBalance = await getPlayerBalance(playerUUID)
+
         if(AccountType==='purse'){
             const embed = new EmbedBuilder()
             if(userBalance.purseBalance >= amount){

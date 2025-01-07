@@ -18,11 +18,11 @@ export default {
 			// console.log(...servers);
 			const responseObjet = response.map((e)=>{return e.attributes})
 			// console.log(responseObjet);
-			console.log("Response: ",response);
+			// console.log("Response: ",response);
 			const exsisitingServers = new Array
 			servers.forEach(server => exsisitingServers.push(server.dataValues))
 			// console.log('object :>> ', servers);
-			console.log("exsisiting Server: ",exsisitingServers);
+			// console.log("exsisiting Server: ",exsisitingServers);
 			await syncServers(response,exsisitingServers)
 		} catch (error) {
 			console.log('Some error occure while updating server list');
