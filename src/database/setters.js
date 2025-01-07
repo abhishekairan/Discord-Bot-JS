@@ -46,6 +46,14 @@ export function addServer(id,uuid,name,identifier) {
         identifier: identifier 
     })
 }
+export function updateServer(id,uuid,name,identifier) {
+    Servers.update({
+        id: id,
+        uuid: uuid,
+        name: name,
+    },{where: {
+        identifier: identifier}})
+}
 
 export class MoneySetter{
     // Function to add new money purchase log
@@ -232,7 +240,8 @@ export class RankSetter{
 }
 
 export default { 
-    addServer, 
+    addServer,
+    updateServer,
     MoneySetter,
     CoinSetter,
     RankSetter,
