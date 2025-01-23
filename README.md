@@ -1,2 +1,2 @@
-# Discord-Bot-JS
- This is a rewrite version of my previsious discord bot made in python
+Change things from mcinfo.ts, if you want
+You should migrate all of the things in mcinfo to database, which will be more dynamic
