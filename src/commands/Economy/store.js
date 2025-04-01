@@ -12,9 +12,9 @@ export default {
             .addChoices([
                 { name: "Rank", value: "rank" },
                 { name: "Money", value: "money" },
-                { name: "Coins", value: "coin" },
+                // { name: "Coins", value: "coin" },
                 { name: "Keys", value: "keys" },
-                { name: "Bundles", value: "bundles" },
+                // { name: "Bundles", value: "bundles" },
             ])
         ),
         

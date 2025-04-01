@@ -6,7 +6,7 @@ const {colors} = config
 export const moneyStore = new EmbedBuilder()
     .setTitle("Money Store")
     .setDescription("Run out of money? or want to stay high at leaderboard? You can buy in-gamem money from real money, it also help us running the server 😄")
-    .addFields({name:"Price",value:"> 10₹  - 20k 💵\n> 20₹  - 50k 💵\n> 50₹  - 200k 💵\n> 100₹ - 500k 💵"})
+    .addFields({name:"Price",value:"> 10₹  - 10k 💵\n> 20₹  - 25k 💵\n> 50₹  - 75k 💵\n> 100₹ - 200k 💵"})
     .setColor(colors.green)
 
 
@@ -23,10 +23,10 @@ export const rankStore = new EmbedBuilder()
     .setTitle("Rank Store")
     .setDescription("Enough of the restrictions? Tried of cooldown and non-access to command?? Want to standout from the crowd??? We got you!!! Checkout the ranks and permission which comes along.")
     .addFields([
-        {name:"VIP", value: "> 150₹ [1 month]\n> 250₹ [2 months]\n> 400₹: [3 months]", inline: false},
-        {name:"VIP+", value: "> 500₹ [1 month]\n> 900₹ [2 months]\n> 1300₹: [3 months]", inline: false},
-        {name:"MVP", value: "> 650₹ [1 month]\n> 1200₹ [2 months]\n> 1800₹: [3 months]", inline: false},
-        {name:"Details",value:"[Click Here to see full details](https://cdn.discordapp.com/attachments/933705643959910420/1295355783302615114/image.png?ex=670e5995&is=670d0815&hm=330d006b33f8d196639171c06021dabb8c41b0b7ea3237ff2612e850fcf4f041&)"}
+        {name:"VIP", value: "> 300₹ [1 month]\n> 500₹ [2 months]\n> 800₹: [3 months]", inline: false},
+        {name:"ELITE", value: "> 700₹ [1 month]\n> 1200₹ [2 months]\n> 1800₹: [3 months]", inline: false},
+        {name:"ultra", value: "> 1K₹ [1 month]\n> 1800₹ [2 months]\n> 2500₹: [3 months]", inline: false},
+        {name:"Details",value:"[Click Here to see full details](https://drive.google.com/file/d/1DF9cSOFKi2B_nvCHsLDGsFrz9xXDRxV-/view?usp=sharing)"}
     ])
     .setColor(colors.magenta)
     // .setImage('https://cdn.discordapp.com/attachments/933705643959910420/1295355783302615114/image.png?ex=670e5995&is=670d0815&hm=330d006b33f8d196639171c06021dabb8c41b0b7ea3237ff2612e850fcf4f041&')
@@ -36,10 +36,10 @@ export const keyStore = new EmbedBuilder({
     title: "Key Store",
     description: `Want to buy more crate key, don't worry we got you!!!`,
     fields: [
-        {name:"Single Key", value: "- Spawner key - 25rs\n- Armory-I key - 25rs",},
-        {name:"Combos", value: `- 1x Spawner key + x2 Armory-I key - 70rs ( vice versa )
-- 5x Spawner key + x5 Armory-I key - 230rs
-- 10x Spawner key + 10x Armory-I key - 450rs`,}
+        {name:"Bundle 1 [50rs]", value: "- 10 x Epic Crates\n- 5 x Rare Crates\n- 2 x Legendary Crates",inline: true},
+        {name:"Bundle 2 [100rs]", value: "- 20 x Epic Crates\n- 10 x Rare Crates\n- 5 x Legendary Crates",inline: true},
+        {name:"Bundle 3 [250rs]", value: "- 50 x Epic Crates\n- 20 x Rare Crates\n- 10 x Legendary Crates",inline: true},
+        {name:"Single Keys", value: "- 5rs/Epic Crate Key\n- 10rs/Rare Crate Key\n- 15rs/Legendary Crate key",}
     ],
 }).setColor(colors.brown)
 
